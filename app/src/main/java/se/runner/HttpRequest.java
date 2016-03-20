@@ -1,31 +1,40 @@
-package se.runner.test;
+package se.runner;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
+import android.content.ContentValues;
 import android.os.AsyncTask;
-import android.webkit.URLUtil;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
-public class Greeting extends AsyncTask<String, Integer, String> {
-    private Context context;
-    String strUrl = "http://10.214.0.195:9000/greeting";
+public class HttpRequest extends AsyncTask<String, Integer, String> {
+    private static String baseUrl = "http://10.214.0.195:9000";
+    private StringBuilder strUrl;
 
-    public Greeting(Context context) {
-        this.context = context;
+    public interface HttpCallback {
+        void onPost(String get);
+    }
+
+    private HttpCallback httpCallback;
+
+    public HttpRequest(String path, ContentValues parameters, HttpCallback callback) {
+        strUrl = new StringBuilder(baseUrl);
+        strUrl.append(path);
+        httpCallback = callback;
+        int flag = 0;
+        for (String key : parameters.keySet()) {
+            strUrl.append(flag == 0 ? "?" : "&&");
+        }
     }
 
     @Override
     protected String doInBackground(String... params) {
         try {
-            URL url = new URL(strUrl);
+            URL url = new URL(strUrl.toString());
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
@@ -42,8 +51,7 @@ public class Greeting extends AsyncTask<String, Integer, String> {
 
     @Override
     protected void onPostExecute(String get) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage(get);
-        builder.create().show();
+        if (httpCallback != null)
+            httpCallback.onPost(get);
     }
 }

@@ -1,5 +1,7 @@
 package se.runner;
 
+import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -17,7 +19,14 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.greet)
     void greeting() {
-        new Greeting(MainActivity.this).execute();
+        new HttpRequest("/greeting", new ContentValues(), new HttpRequest.HttpCallback() {
+            @Override
+            public void onPost(String get) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setMessage(get);
+                builder.create().show();
+            }
+        }).execute();
     }
 
     @Override
