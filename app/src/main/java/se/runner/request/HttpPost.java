@@ -1,45 +1,48 @@
-package se.runner;
+package se.runner.request;
 
-import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Scanner;
 
-public class HttpRequest extends AsyncTask<String, Integer, String> {
-    private static String baseUrl = "http://10.214.0.195:9000";
+public class HttpPost extends AsyncTask<String, Integer, String> {
     private StringBuilder strUrl;
-
-    public interface HttpCallback {
-        void onPost(String get);
-    }
-
     private HttpCallback httpCallback;
+    private ContentValues parameters;
 
-    public HttpRequest(String path, ContentValues parameters, HttpCallback callback) {
-        strUrl = new StringBuilder(baseUrl);
+    public HttpPost(String path, ContentValues parameters, HttpCallback callback) {
+        strUrl = new StringBuilder(HttpCallback.baseUrl);
         strUrl.append(path);
         httpCallback = callback;
-        int flag = 0;
-        for (String key : parameters.keySet()) {
-            strUrl.append(flag == 0 ? "?" : "&&");
-        }
+        this.parameters = parameters;
     }
 
     @Override
     protected String doInBackground(String... params) {
         try {
             URL url = new URL(strUrl.toString());
+            Log.v("Http POST url", strUrl.toString());
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod("POST");
             urlConnection.setUseCaches(false);
+            Writer writer = new OutputStreamWriter(urlConnection.getOutputStream());
+            int flag = 0;
+            for (String key : parameters.keySet()) {
+                writer.write(flag == 0 ? "" : "&");
+                writer.write(key);
+                writer.write(parameters.getAsByte(key));
+                flag = 1;
+            }
             InputStream in = new BufferedInputStream(urlConnection.getInputStream());
             Scanner scanner = new Scanner(in);
             return scanner.nextLine();

@@ -4,4 +4,9 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="task_square">任务广场</string>
+    <string name="mydelivery">我的配送</string>
+    <string name="mytask">我的任务</string>
+    <string name="user_center">个人中心</string>
+    <string name="test">测试</string>
 </resources>
