@@ -11,6 +11,7 @@ import se.runner.request.HttpPost;
 
 public class User
 {
+    final private String TAG = "USER";
     private String account;
     private String passwd;
     private String nickname;
@@ -26,10 +27,10 @@ public class User
     {
         this.account = account;
         this.passwd = passwd;
-        this.nickname = "null";
-        this.icon = "default.jpg";
+        this.nickname = "local_null";
+        this.icon = "local_default.jpg";
         this.balance = 0;
-        this.address = "null";
+        this.address = "local_null";
         this.login = 0;
         register = false;
     }
@@ -94,6 +95,9 @@ public class User
 
     public boolean login()
     {
+        if(!register)
+            Log.e(TAG,"you haven't registered yet!");
+
         ContentValues para = new ContentValues();
 
         para.put("account",account);
@@ -104,11 +108,11 @@ public class User
             public void onPost(String get)
             {
                 if(get == null){
-                    Log.e("User-login:","get is null");
+                    Log.e(TAG,"get is null");
                     return;
                 }
 
-                Log.e("User-Login:",get);
+                Log.e(TAG,"login response="+get);
 
                 if(get.equals("login success"))
                 {
@@ -125,7 +129,7 @@ public class User
                 }
                 else
                 {
-                    Log.e("Fatal-Error","看不懂服务器发回来什么鬼东西");
+                    Log.e(TAG,"看不懂服务器发回来什么鬼东西");
                 }
             }
         }).execute();
@@ -144,14 +148,14 @@ public class User
             public void onPost(String get)
             {
                 if(get == null)
-                    Log.e("User-Logout:","get is null");
+                    Log.e(TAG,"get is null");
                 else if(get.equals("logout success"))
                 {
                     login = 0;
                 }
                 else
                 {
-                    Log.e("User-logout:","logout can't fail");
+                    Log.e(TAG,"logout can't fail");
                     //// TODO: 3/30/16 User-logout failed
                 }
             }
@@ -162,7 +166,7 @@ public class User
 
     public boolean register()
     {
-        Log.e("User","Registering a new accout");
+        Log.e(TAG,"Registering a new accout");
 
         ContentValues para = new ContentValues();
 
@@ -176,25 +180,27 @@ public class User
                 if(get == null )  // reigster failed
                 {
                     //// TODO: 3/30/16 USER register failed
-                    Log.e("User-register","get string is null");
+                    Log.e(TAG,"get string is null");
                 }
                 else
                 {
-                    Log.e("User-register","??"+get);
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(get);
-//
-//                        nickname = (String)jsonObject.get("nickname");
-//                        icon = (String) jsonObject.get("icon");
-//                        balance = (int) jsonObject.get("balance");
-//                        address = (String) jsonObject.get("address");
-//                        login = 0;
-//                        register = true;
-//                    }
-//                    catch ( JSONException ex )
-//                    {
-//                        ex.printStackTrace();
-//                    }
+                    Log.e(TAG,"register response="+get);
+                    try {
+                        JSONObject jsonObject = new JSONObject(get);
+
+                        nickname = (String)jsonObject.get("nickname");
+                        icon = (String) jsonObject.get("icon");
+                        balance = (int) jsonObject.get("balance");
+                        address = (String) jsonObject.get("address");
+                        login = 0;
+                        register = true;
+
+                        Log.e(TAG,"register result:address="+getAddress());
+                    }
+                    catch ( JSONException ex )
+                    {
+                        ex.printStackTrace();
+                    }
 
 
                 }
