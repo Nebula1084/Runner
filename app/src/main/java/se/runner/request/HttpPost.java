@@ -73,7 +73,7 @@ public class HttpPost extends AsyncTask<String, Integer, String> {
                     postData.append('&');
                 postData.append(URLEncoder.encode(key,"UTF-8"));
                 postData.append('=');
-                postData.append(URLEncoder.encode((String)parameters.get(key),"UTF-8") );
+                postData.append(URLEncoder.encode((String) parameters.get(key),"UTF-8") );
                 flag = 1;
             }
 
@@ -89,6 +89,18 @@ public class HttpPost extends AsyncTask<String, Integer, String> {
             int responsCode = conn.getResponseCode();
             Log.e(TAG,"response code="+responsCode);
 
+//            String result;
+//            if (responsCode == HttpURLConnection.HTTP_OK)
+//            {
+//                Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+//                StringBuilder sb = new StringBuilder();
+//                for (int c; (c = in.read()) >= 0;)
+//                    sb.append((char)c);
+//                Log.e("Response",sb.toString());
+//                result = sb.toString();
+//            }
+//            else
+//                result = "HTTP_NOT_OK";
             Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
             StringBuilder sb = new StringBuilder();
             for (int c; (c = in.read()) >= 0;)
@@ -108,8 +120,5 @@ public class HttpPost extends AsyncTask<String, Integer, String> {
         if (httpCallback != null)
             httpCallback.onPost(get);
     }
-
-
-
 
 }

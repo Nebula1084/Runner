@@ -44,16 +44,16 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if(intent.getStringExtra("methodName").equals("HttpDone")){
-            checkValue();
-        }
-    }
-
-    public void checkValue()
-    {
-        Log.e(TAG,user.getAddress());
-    }
+//    @Override
+//    protected void onNewIntent(Intent intent) {
+//        super.onNewIntent(intent);
+//        if(intent.getStringExtra("methodName").equals("HttpDone")){
+//            checkValue();
+//        }
+//    }
+//
+//    public void checkValue()
+//    {
+//        Log.e(TAG,user.getAddress());
+//    }
 }

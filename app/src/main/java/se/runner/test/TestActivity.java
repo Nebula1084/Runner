@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -13,8 +14,12 @@ import se.runner.R;
 import se.runner.request.HttpCallback;
 import se.runner.request.HttpGet;
 import se.runner.ui.LoginActivity;
+import se.runner.user.User;
 
 public class TestActivity extends AppCompatActivity {
+
+    private User user;
+    final private String TAG="TestActivity";
 
     @OnClick(R.id.test_btn_greet)
     void greeting() {
@@ -28,8 +33,52 @@ public class TestActivity extends AppCompatActivity {
 //                builder.create().show();
 //            }
 //        }).execute();
-        startActivity(new Intent( TestActivity.this , TestUserModule.class));
+//        startActivity(new Intent( TestActivity.this , TestUserModule.class));
+        user.register();
+    }
 
+    @OnClick(R.id.loginBtn)
+    void asdfjaddfjsk()
+    {
+        user.login();
+    }
+
+    @OnClick(R.id.addressBtn)
+    void azdaffdf()
+    {
+        user.setAddress("earth");
+    }
+
+    @OnClick(R.id.nickBtn)
+    void nickkkkk()
+    {
+        user.setNickname("my name is nick");
+    }
+
+    @OnClick(R.id.payBtn)
+    void payyyyy()
+    {
+        User other = new User(this,"test","test");
+        user.pay(other, 3);
+    }
+
+    @OnClick(R.id.iconBtn)
+    void setIconnnnn()
+    {
+        user.setIcon("icon.png");
+    }
+
+    @OnClick(R.id.rateBtn)
+    void rateeeeed()
+    {
+        float r = 24.5f;
+        user.setAveragerate(r);
+    }
+
+    @OnClick(R.id.depositBtn)
+    void deposssss()
+    {
+        user.deposit(234.0);
     }
 
     @Override
@@ -37,5 +86,8 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
         ButterKnife.bind(this);
+
+        user = new User(this,"hello","android");
+
     }
 }

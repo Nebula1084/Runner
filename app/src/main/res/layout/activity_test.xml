@@ -7,6 +7,49 @@
         android:id="@+id/test_btn_greet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="用户测试"/>
+        android:text="register"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="login"
+        android:id="@+id/loginBtn"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="set address"
+        android:id="@+id/addressBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="nickName"
+        android:id="@+id/nickBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="pay"
+        android:id="@+id/payBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Deposit"
+        android:id="@+id/depositBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="rate"
+        android:id="@+id/rateBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Icon"
+        android:id="@+id/iconBtn"/>
 
 </LinearLayout>
