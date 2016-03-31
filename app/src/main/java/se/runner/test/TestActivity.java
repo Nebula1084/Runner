@@ -81,6 +81,26 @@ public class TestActivity extends AppCompatActivity {
         user.deposit(234.0);
     }
 
+    @OnClick(R.id.infoBtn)
+    void infffffo()
+    {
+        user.getInfo();
+    }
+
+    @OnClick(R.id.passwdBtn)
+    void setpasssssswdd()
+    {
+        user.setPasswd("nice weather");
+    }
+
+    @OnClick(R.id.locateBtn)
+    void locateeeee()
+    {
+        user.setLongtitude(34.45);
+
+        user.setLatitude(5.03);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

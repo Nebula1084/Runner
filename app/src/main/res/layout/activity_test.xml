@@ -12,9 +12,23 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="set passwd"
+        android:id="@+id/passwdBtn"
+        android:layout_gravity="right"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="login"
         android:id="@+id/loginBtn"
         />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="set location"
+        android:id="@+id/locateBtn"
+        android:layout_gravity="right"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -51,5 +65,11 @@
         android:layout_height="wrap_content"
         android:text="Icon"
         android:id="@+id/iconBtn"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="info"
+        android:id="@+id/infoBtn"/>
 
 </LinearLayout>

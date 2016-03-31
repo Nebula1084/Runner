@@ -28,6 +28,8 @@ public class User
     private int login;
     private int timestamp;
     private boolean register;
+    private double latitude;
+    private double longtitude;
     Context context;
 
     public User(Context ctx, String account, String passwd)
@@ -89,7 +91,36 @@ public class User
 
         ContentValues para = new ContentValues();
         para.put("passwd", passwd);
-        //// TODO: 3/31/16 update passwd to server
+        para.put("account",account);
+        new HttpPost("/setpasswd", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"set passwd return null ");
+                else
+                {
+                    parseServerResponse(get);
+
+                    new AlertDialog.Builder(context)
+                            .setTitle("密码修改成功")
+                            .setMessage("请务必牢记您的密码")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        }).execute();
     }
 
     public void setNickname(final String nickname)
@@ -108,7 +139,7 @@ public class User
             {
                 if( get == null )
                     Log.e(TAG,"setnickname return null");
-                else if( get.equals("not exit"))
+                else if( get.equals("not exist"))
                     Log.e(TAG,"set nickname::user not exist");
                 else
                 {
@@ -158,7 +189,7 @@ public class User
             {
                 if( get == null)
                     Log.e(TAG,"set address return null");
-                else if( get.equals("not exit"))
+                else if( get.equals("not exist"))
                 {
                     Log.e(TAG, "user not exist");
                     new AlertDialog.Builder(context)
@@ -218,7 +249,7 @@ public class User
             {
                 if( get == null )
                     Log.e(TAG,"set averagerate return null");
-                else if( get.equals("not exit"))
+                else if( get.equals("not exist"))
                 {
                     Log.e(TAG, "user not exist");
                     new AlertDialog.Builder(context)
@@ -261,6 +292,60 @@ public class User
         }).execute();
     }
 
+    public void setLatitude(double l)
+    {
+        latitude = l;
+        if( !isLogin() )
+        {
+            Log.e(TAG,"not login,won't update to server");
+            return;
+        }
+
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+        para.put("latitude",latitude+"");
+        new HttpPost("/setlatitude", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"set latitude return null");
+                else
+                {
+                    parseServerResponse(get);
+                }
+            }
+        }).execute();
+    }
+
+    public void setLongtitude(double l)
+    {
+        longtitude = l;
+        if( !isLogin() )
+        {
+            Log.e(TAG,"not login,won't update to server");
+            return;
+        }
+
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+        para.put("longtitude",longtitude+"");
+        new HttpPost("/setlongtitude", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"set longtitude return null");
+                else
+                {
+                    parseServerResponse(get);
+                }
+            }
+        }).execute();
+    }
+
     public void deposit(double amount)
     {
         if(!isLogin()) {
@@ -278,7 +363,7 @@ public class User
             {
                 if( get == null )
                     Log.e(TAG,"deposit return null");
-                else if( get.equals("not exit"))
+                else if( get.equals("not exist"))
                 {
                     Log.e(TAG, "set nickname::user not exist");
                     new AlertDialog.Builder(context)
@@ -381,9 +466,6 @@ public class User
 
     public boolean login()
     {
-        if(!register)
-            Log.e(TAG,"you haven't registered yet!");
-
         ContentValues para = new ContentValues();
 
         para.put("account",account);
@@ -403,6 +485,7 @@ public class User
                 if(get.equals("account not exist."))
                 {
                     //// TODO: 3/30/16 login-failed:no such accout
+                    register = false;
                     new AlertDialog.Builder(context)
                             .setTitle("用户不存在")
                             .setMessage("快来注册一个吧")
@@ -423,6 +506,7 @@ public class User
                 else if(get.equals("passwd incorrect"))
                 {
                     //// TODO: 3/30/16 login-faild: incorrect passwd
+                    register = true;
                     new AlertDialog.Builder(context)
                             .setTitle("密码错误")
                             .setMessage("请检查密码拼写")
@@ -442,6 +526,7 @@ public class User
                 else
                 {
                     login = 1;
+                    register = true;
                     // get account info from server
                     //parseServerResponse(get);
                     getInfo();
@@ -559,9 +644,9 @@ public class User
 
                     return;
                 }
-                else if(get.equals("already exit") )
+                else if(get.equals("already exist") )
                 {
-                    Log.e(TAG,"register failed for already exit");
+                    Log.e(TAG,"register failed for already exist");
                     register = true;
 
                     new AlertDialog.Builder(context)
@@ -629,6 +714,22 @@ public class User
                 {
                     // update info from server
                     parseServerResponse(get);
+
+                    new AlertDialog.Builder(context)
+                            .setTitle("Debug")
+                            .setMessage(get)
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 }
             }
         }).execute();
@@ -674,6 +775,8 @@ public class User
             balance = (double) jsonObject.get("balance");
             address = (String) jsonObject.get("address");
             averagerate = (double) jsonObject.get("averagerate");
+            latitude = (double) jsonObject.get("latitude");
+            longtitude = (double) jsonObject.get("longtitude");
 //            timestamp = (int) jsonObject.get("timestamp");
 //            Log.e(TAG,"register result:address="+getAddress());
         }
