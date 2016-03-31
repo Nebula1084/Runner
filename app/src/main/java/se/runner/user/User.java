@@ -30,6 +30,8 @@ public class User
     private boolean register;
     private double latitude;
     private double longtitude;
+    private int lauchTaskNum;
+    private int takeTaskNum;
     Context context;
 
     public User(Context ctx, String account, String passwd)
@@ -42,6 +44,8 @@ public class User
         this.balance = 0;
         this.address = "local_null";
         this.login = 0;
+        lauchTaskNum = 0;
+        takeTaskNum = 0;
         register = false;
     }
 
