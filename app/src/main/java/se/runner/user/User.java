@@ -1,6 +1,10 @@
 package se.runner.user;
 
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -8,10 +12,13 @@ import org.json.JSONObject;
 
 import se.runner.request.HttpCallback;
 import se.runner.request.HttpPost;
+import se.runner.ui.LoginActivity;
 
 public class User
 {
     final private String TAG = "USER";
+
+
     private String account;
     private String passwd;
     private String nickname;
@@ -22,9 +29,11 @@ public class User
     private int login;
     private int timestamp;
     private boolean register;
+    Context context;
 
-    public User(String account, String passwd)
+    public User(Context ctx, String account, String passwd)
     {
+        context = ctx;
         this.account = account;
         this.passwd = passwd;
         this.nickname = "local_null";
@@ -73,24 +82,87 @@ public class User
         return averagerate;
     }
 
-    public void setPasswd(String passwd) {
+    public void setPasswd(String passwd)
+    {
         this.passwd = passwd;
+
+        ContentValues para = new ContentValues();
+        para.put("passwd", passwd);
+        //// TODO: 3/31/16 update passwd to server
     }
 
-    public void setNickname(String nickname) {
+    public void setNickname(String nickname)
+    {
         this.nickname = nickname;
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+        para.put("nickname",nickname);
+        new HttpPost("/setnickname", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null)
+                    Log.e(TAG,"setnickname return null");
+                else
+                {
+                    //// TODO: 3/31/16 update nickname
+                    parseServerResponse(get);
+                }
+            }
+        }).execute();
     }
 
-    public void setIcon(String icon) {
+    public void setIcon(String icon)
+    {
         this.icon = icon;
+        //todo update file/image
     }
 
-    public void setAddress(String address) {
+    public void setAddress(String address)
+    {
         this.address = address;
+
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+        para.put("address",address);
+        new HttpPost("/setaddress", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null)
+                    Log.e(TAG,"set address return null");
+                else
+                {
+                    //// TODO: 3/31/16 set address
+                    parseServerResponse(get);
+                }
+            }
+        }).execute();
     }
 
-    public void setAveragerate(float averagerate){
+    public void setAveragerate(float averagerate)
+    {
         this.averagerate = averagerate;
+
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+        para.put("averagerate",averagerate);
+        new HttpPost("/setaveragerate", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"set averagerate return null");
+                else
+                {
+                    //// TODO: 3/31/16 set averagerate
+                    parseServerResponse(get);
+                }
+            }
+        }).execute();
     }
 
     public boolean login()
@@ -118,6 +190,8 @@ public class User
                 {
                     login = 1;
                     register = true;
+                    // get account info from server
+                    getInfo();
                 }
                 else if(get.equals("account not exist."))
                 {
@@ -166,12 +240,12 @@ public class User
 
     public boolean register()
     {
-        Log.e(TAG,"Registering a new accout");
+        Log.e(TAG, "Registering a new accout");
 
         ContentValues para = new ContentValues();
 
         para.put("account",account);
-        para.put("passwd",passwd);
+        para.put("passwd", passwd);
         new HttpPost("/register", para, new HttpCallback()
         {
             @Override
@@ -185,33 +259,100 @@ public class User
                 else
                 {
                     Log.e(TAG,"register response="+get);
-                    try {
-                        JSONObject jsonObject = new JSONObject(get);
+                    parseServerResponse(get);
 
-                        nickname = (String)jsonObject.get("nickname");
-                        icon = (String) jsonObject.get("icon");
-                        balance = (int) jsonObject.get("balance");
-                        address = (String) jsonObject.get("address");
-                        login = 0;
-                        register = true;
-
-                        Log.e(TAG,"register result:address="+getAddress());
-                    }
-                    catch ( JSONException ex )
+                    if( register )
                     {
-                        ex.printStackTrace();
+                        new AlertDialog.Builder(context)
+                                .setTitle("注册成功")
+                                .setMessage("快去登录吧~")
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue with delete
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
                     }
-
-
                 }
+
             }
         }).execute();
+
 
         return register;
     }
 
-    public void refressh()
+    public void getInfo()
     {
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+        new HttpPost("/info", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"get info return null");
+                else
+                {
+                    // update info from server
+                    parseServerResponse(get);
+                }
+            }
+        }).execute();
+    }
 
+    public void refresh()
+    {
+        int localTimeStamp = timestamp;
+
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+        new HttpPost("/timestamp", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if ( get == null )
+                    Log.e(TAG,"get timestamp reurn null");
+                else
+                {
+                    //// TODO: 3/31/16 get timestammp from server
+                }
+            }
+        }).execute();
+
+        if( timestamp < localTimeStamp )  // local is newest, need update to local
+        {
+            timestamp = localTimeStamp;
+            //// TODO: 3/31/16 update local info to server
+        }
+    }
+
+    public void parseServerResponse(String response)
+    {
+        try
+        {
+            JSONObject jsonObject = new JSONObject(response);
+
+            nickname = (String)jsonObject.get("nickname");
+            icon = (String) jsonObject.get("icon");
+            balance = (int) jsonObject.get("balance");
+            address = (String) jsonObject.get("address");
+//            timestamp = (int) jsonObject.get("timestamp");
+            login = 0;
+            register = true;
+//            Log.e(TAG,"register result:address="+getAddress());
+        }
+        catch ( JSONException ex )
+        {
+            ex.printStackTrace();
+        }
     }
 }

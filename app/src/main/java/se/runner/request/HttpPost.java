@@ -3,9 +3,13 @@ package se.runner.request;
 import android.content.ContentValues;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -18,12 +22,15 @@ import java.net.URLEncoder;
 import java.util.Map;
 import java.util.Scanner;
 
+import se.runner.ui.MainActivity;
+
 public class HttpPost extends AsyncTask<String, Integer, String> {
     private StringBuilder strUrl;
     private HttpCallback httpCallback;
     private ContentValues parameters;
     private String TAG="HttpPost";
 
+    // for string
     public HttpPost(String path, ContentValues parameters, HttpCallback callback) {
         strUrl = new StringBuilder(HttpCallback.baseUrl);
         strUrl.append(path);
@@ -101,4 +108,8 @@ public class HttpPost extends AsyncTask<String, Integer, String> {
         if (httpCallback != null)
             httpCallback.onPost(get);
     }
+
+
+
+
 }

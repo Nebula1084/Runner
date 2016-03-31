@@ -11,10 +11,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import se.runner.R;
 import se.runner.test.TestActivity;
+import se.runner.test.TestUserModule;
 import se.runner.user.User;
 
 public class LoginActivity extends AppCompatActivity {
     private String TAG = "LoginActivity";
+    User user;
 
     @OnClick(R.id.login_btn_login)
     void login() {
@@ -23,13 +25,15 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.login_btn_test)
     void test() {
-//        startActivity(new Intent(LoginActivity.this, TestActivity.class));
-        User user = new User("android","android");
-        user.register();
+        startActivity(new Intent(LoginActivity.this, TestActivity.class));
 
-        user.login();
-
-        Log.e(TAG,user.getAddress());
+//        startActivity(new Intent( LoginActivity.this , TestUserModule.class));
+//        user = new User(this,"android","android");
+//        user.register();
+//
+////        user.login();
+//
+//        Log.e(TAG,user.getAddress());
     }
 
     @Override
@@ -38,5 +42,18 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
 
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if(intent.getStringExtra("methodName").equals("HttpDone")){
+            checkValue();
+        }
+    }
+
+    public void checkValue()
+    {
+        Log.e(TAG,user.getAddress());
     }
 }
