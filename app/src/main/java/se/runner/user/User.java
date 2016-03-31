@@ -47,6 +47,7 @@ public class User
 
     public boolean isRegistered()
     {
+        //// TODO: 4/1/16 need a entrance for validate register info
         return register;
     }
 
