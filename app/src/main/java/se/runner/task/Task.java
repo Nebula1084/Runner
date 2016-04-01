@@ -1,5 +1,7 @@
 package se.runner.task;
 
+import android.content.Context;
+
 import se.runner.user.User;
 
 public class Task
@@ -27,31 +29,35 @@ public class Task
     private long finish_timestamp;  // finish includes abort or completed
 
     private String comment;
-    private User taskLaucher;
-    private User taskTaker;
-    private User taskCustomer;
+    private String description;
+
+    private String taskLauncher;
+    private String taskTaker;
+    private String taskCustomer;
+
+    private Context context;
 
 
-    public Task(User laucher, int taskType )
+    public Task(Context ctx, String laucherAccountName , int taskType )
     {
-        if (laucher.isRegistered() == false )
-        {
-            //// TODO: 4/1/16 handle unregistered user task request
+        if( checkAccountExistence(laucherAccountName) == false )
+            return;
 
-            return ;
-        }
+        context = ctx;
+        taskLauncher = laucherAccountName;
+        taskTaker = "undefined";
+        taskCustomer = "undefined";
+
+        type = taskType;
         status = TaskStatus.INIT;
         create_timestamp = System.currentTimeMillis();
+        id = (int) create_timestamp;
     }
 
-    public void gainCargo()
+    public void startTask()
     {
-
-    }
-
-    public void deliverCargo()
-    {
-
+        setStatus(TaskStatus.PROGRESS);
+        // TODO: 4/1/16 start task
     }
 
     public void releaseTask()
@@ -78,10 +84,31 @@ public class Task
         setStatus(TaskStatus.ABORT);
         //// TODO: 4/1/16 abort task
     }
+
     public void comleteTask()
     {
         setStatus(TaskStatus.COMPLETED);
         //// TODO: 4/1/16 complete task
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setDeadline(long t)
+    {
+        deadline_timestamp = t;
+    }
+
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    public String getTaskDescription()
+    {
+        return description;
     }
 
     private void setStatus(TaskStatus t)
@@ -89,19 +116,28 @@ public class Task
         status = t;
     }
 
-    public void setTaskLaucher(User user)
+    public boolean setTaskLauncher(String accountName)
     {
-        taskLaucher = user;
+        if( checkAccountExistence(accountName) == false )
+            return false;
+        taskLauncher = accountName;
+        return true;
     }
 
-    public void setTaskTaker(User user)
+    public boolean setTaskTaker(String accountName )
     {
-        taskTaker = user;
+        if( checkAccountExistence(accountName) == false )
+            return false;
+        taskTaker = accountName;
+        return true;
     }
 
-    public void setTaskCustomer(User user)
+    public boolean setTaskCustomer(String accountName )
     {
-        taskCustomer = user;
+        if( checkAccountExistence(accountName) == false )
+            return false;
+        taskCustomer = accountName;
+        return true;
     }
 
     public boolean setRate(double rate)
@@ -121,11 +157,17 @@ public class Task
 
     public void setComment(String comment)
     {
-
+        this.comment = comment;
     }
 
     public String getComment()
     {
         return comment;
+    }
+
+    public boolean checkAccountExistence(String accountName )
+    {
+        User user = new User(context,accountName,"testExistence");
+        return user.isRegistered();
     }
 }

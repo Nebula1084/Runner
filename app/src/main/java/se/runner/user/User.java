@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -12,7 +11,6 @@ import org.json.JSONObject;
 
 import se.runner.request.HttpCallback;
 import se.runner.request.HttpPost;
-import se.runner.ui.LoginActivity;
 
 public class User
 {
@@ -30,7 +28,7 @@ public class User
     private boolean register;
     private double latitude;
     private double longtitude;
-    private int lauchTaskNum;
+    private int launchTaskNum;
     private int takeTaskNum;
     Context context;
 
@@ -44,7 +42,7 @@ public class User
         this.balance = 0;
         this.address = "local_null";
         this.login = 0;
-        lauchTaskNum = 0;
+        launchTaskNum = 0;
         takeTaskNum = 0;
         register = false;
     }
