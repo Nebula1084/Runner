@@ -64,9 +64,6 @@ public class User
         ContentValues para = new ContentValues();
         para.put("account", account);
 
-        if( register == true )
-            return register;
-
         new HttpPost("/checkuser", para, httpCallback ).execute();
 
         return false;
