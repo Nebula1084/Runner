@@ -47,9 +47,93 @@ public class User
         register = false;
     }
 
-    public boolean isRegistered()
+    public boolean isRegistered(HttpCallback httpCallback)
     {
         //// TODO: 4/1/16 need a entrance for validate register info
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+
+        new HttpPost("/checkuser",para,httpCallback).execute();
+
+        return register;
+    }
+
+    // for outer function call
+    public boolean checkUser(HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("account", account);
+
+        if( register == true )
+            return register;
+
+        new HttpPost("/checkuser", para, httpCallback ).execute();
+
+        return false;
+    }
+
+    // for inner use
+    public boolean checkUser()
+    {
+        ContentValues para = new ContentValues();
+        para.put("account", account);
+
+        if( register == true )
+            return register;
+
+        new HttpPost("/checkuser", para, new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"check account return null ");
+                else if( get.equals("yes"))
+                {
+                    register = true;
+                    new AlertDialog.Builder(context)
+                            .setTitle("注册信息")
+                            .setMessage("此账户已经注册")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+                else
+                {
+                    register = false;
+                    new AlertDialog.Builder(context)
+                            .setTitle("注册信息")
+                            .setMessage("此账户还未注册")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        }).execute();
+
+        return false;
+    }
+
+    public boolean isRegistered()
+    {
         return register;
     }
 

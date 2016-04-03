@@ -1,7 +1,12 @@
 package se.runner.task;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.util.Log;
 
+import se.runner.request.HttpCallback;
+import se.runner.request.HttpPost;
 import se.runner.user.User;
 
 public class Task
@@ -17,6 +22,7 @@ public class Task
         RATED,   // after the task is rated
     }
 
+    final private String TAG = "TASK";
     private int id;
     private int type;
     private double rate;  // [0~5]
@@ -38,20 +44,55 @@ public class Task
     private Context context;
 
 
-    public Task(Context ctx, String laucherAccountName , int taskType )
+
+    public Task(Context ctx, final String laucherAccountName , final int taskType )
     {
-        if( checkAccountExistence(laucherAccountName) == false )
-            return;
+        HttpCallback callback = new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"set task launcher return null");
+                else if( get.equals("yes"))
+                {
+                    taskLauncher = laucherAccountName;
+                    taskTaker = "undefined";
+                    taskCustomer = "undefined";
+
+                    type = taskType;
+                    status = TaskStatus.INIT;
+                    create_timestamp = System.currentTimeMillis();
+                    id = (int) create_timestamp;
+
+                }
+                else if( get.equals("no"))
+                {
+                    new AlertDialog.Builder(context)
+                            .setTitle("创建任务失败")
+                            .setMessage("任务创建者账户不合法！")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        };
+
 
         context = ctx;
-        taskLauncher = laucherAccountName;
-        taskTaker = "undefined";
-        taskCustomer = "undefined";
 
-        type = taskType;
-        status = TaskStatus.INIT;
-        create_timestamp = System.currentTimeMillis();
-        id = (int) create_timestamp;
+        User user = new User(context,laucherAccountName,"check existence");
+        user.checkUser(callback);
+
     }
 
     public void startTask()
@@ -116,28 +157,119 @@ public class Task
         status = t;
     }
 
-    public boolean setTaskLauncher(String accountName)
+    public void setTaskLauncher(final String accountName)
     {
-        if( checkAccountExistence(accountName) == false )
-            return false;
-        taskLauncher = accountName;
-        return true;
+        HttpCallback callback = new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"set task launcher return null");
+                else if( get.equals("yes"))
+                {
+                    taskLauncher = accountName;
+                }
+                else if( get.equals("no"))
+                {
+                    new AlertDialog.Builder(context)
+                            .setTitle("更改任务发布者失败")
+                            .setMessage("任务发起者账户不合法！")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        };
+
+        User user = new User(context,accountName,"check existence");
+        user.checkUser(callback);
+
     }
 
-    public boolean setTaskTaker(String accountName )
+    public void setTaskTaker(final String accountName )
     {
-        if( checkAccountExistence(accountName) == false )
-            return false;
-        taskTaker = accountName;
-        return true;
+        HttpCallback callback = new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"set task launcher return null");
+                else if( get.equals("yes"))
+                {
+                    taskTaker = accountName;
+                }
+                else if( get.equals("no"))
+                {
+                    new AlertDialog.Builder(context)
+                            .setTitle("承接任务失败")
+                            .setMessage("任务承接者账户不合法！")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        };
+
+        User user = new User(context,accountName,"check existence");
+        user.checkUser(callback);
     }
 
-    public boolean setTaskCustomer(String accountName )
+    public void setTaskCustomer(final String accountName )
     {
-        if( checkAccountExistence(accountName) == false )
-            return false;
-        taskCustomer = accountName;
-        return true;
+        HttpCallback callback = new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if( get == null )
+                    Log.e(TAG,"set task launcher return null");
+                else if( get.equals("yes"))
+                {
+                    taskCustomer = accountName;
+                }
+                else if( get.equals("no"))
+                {
+                    new AlertDialog.Builder(context)
+                            .setTitle("设定任务客户失败")
+                            .setMessage("任务客户账户不合法！")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        };
+
+        User user = new User(context,accountName,"check existence");
+        user.checkUser(callback);
     }
 
     public boolean setRate(double rate)
@@ -165,9 +297,4 @@ public class Task
         return comment;
     }
 
-    public boolean checkAccountExistence(String accountName )
-    {
-        User user = new User(context,accountName,"testExistence");
-        return user.isRegistered();
-    }
 }
