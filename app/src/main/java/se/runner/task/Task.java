@@ -57,8 +57,6 @@ public class Task
                 else if( get.equals("yes"))
                 {
                     taskLauncher = laucherAccountName;
-                    taskTaker = "undefined";
-                    taskCustomer = "undefined";
 
                     type = taskType;
                     status = TaskStatus.INIT;
@@ -89,6 +87,11 @@ public class Task
 
 
         context = ctx;
+        taskLauncher = "default_nobody_";
+        taskTaker = "default_nobody_";
+        taskCustomer = "default_nobody_";
+        comment = "default_very_good";
+        description = "default_this is a tough task";
 
         User user = new User(context,laucherAccountName,"check existence");
         user.checkUser(callback);
