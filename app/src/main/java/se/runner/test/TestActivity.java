@@ -101,6 +101,8 @@ public class TestActivity extends AppCompatActivity {
         user.setLatitude(5.03);
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
