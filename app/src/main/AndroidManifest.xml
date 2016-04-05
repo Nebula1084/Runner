@@ -28,6 +28,8 @@
             android:label="@string/title_activity_main"/>
         <activity android:name=".test.TestUserModule">
         </activity>
+        <activity android:name=".test.TestTaskActivity">
+        </activity>
     </application>
 
 </manifest>

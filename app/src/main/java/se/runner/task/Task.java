@@ -214,7 +214,7 @@ public class Task
         para.put("rate",rate+"");
         para.put("comment",cmt);
 
-        new HttpPost("/finish",para,httpCallback).execute();
+        new HttpPost("/rate",para,httpCallback).execute();
     }
 
 

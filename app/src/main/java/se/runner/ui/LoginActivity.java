@@ -11,6 +11,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import se.runner.R;
 import se.runner.test.TestActivity;
+import se.runner.test.TestTaskActivity;
 import se.runner.test.TestUserModule;
 import se.runner.user.User;
 
@@ -25,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
 
     @OnClick(R.id.login_btn_test)
     void test() {
-        startActivity(new Intent(LoginActivity.this, TestActivity.class));
+        startActivity(new Intent(LoginActivity.this, TestTaskActivity.class));
 
 //        startActivity(new Intent( LoginActivity.this , TestUserModule.class));
 //        user = new User(this,"android","android");
