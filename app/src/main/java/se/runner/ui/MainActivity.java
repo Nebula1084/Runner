@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
@@ -16,6 +19,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.karim.MaterialTabs;
 import se.runner.R;
+import se.runner.widget.CaptureActivityAnyOrientation;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -74,10 +78,12 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK)
             return;
+
         switch (requestCode){
             case MAIN_QR_SCAN:
                 Toast.makeText(this, data.getStringExtra(ScanActivity.SCAN_URL), Toast.LENGTH_LONG).show();

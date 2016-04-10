@@ -4,15 +4,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import se.runner.R;
+import se.runner.widget.CaptureActivityAnyOrientation;
 
 public class ScanActivity extends AppCompatActivity {
     final public static String SCAN_URL = "scan_url";
+
+    private String qrResult;
 
     private Intent result;
     @Bind(R.id.tool_bar)
@@ -30,9 +37,38 @@ public class ScanActivity extends AppCompatActivity {
         }
 
         result = new Intent();
-        /*This part is demo*/
-        result.putExtra(SCAN_URL, "url::for.test");
-        /*Until here*/
+
+        scan();
+
+    }
+
+    public void scan()
+    {
+        IntentIntegrator integrator = new IntentIntegrator(ScanActivity.this);
+        integrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
+        integrator.setOrientationLocked(false);
+        integrator.setBeepEnabled(true);  // beep sound effect
+        integrator.initiateScan();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent intent)
+    {
+        IntentResult scanResult = IntentIntegrator.parseActivityResult(requestCode,resultCode,intent);
+        if(scanResult != null)
+        {
+            String re = scanResult.getContents();
+            if(re != null)
+            {
+                Log.e("scan result = ", re);
+                qrResult = re;
+                result.putExtra(SCAN_URL,qrResult);
+                confirm();
+            }
+        }
+        else
+        {
+            Log.e("Scan Error","Nothing Scanned!");
+        }
     }
 
     @OnClick(R.id.scan_confirm)
