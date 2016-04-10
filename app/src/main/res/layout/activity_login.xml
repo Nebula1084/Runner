@@ -1,19 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <Button
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <ImageView
+        android:id="@+id/login_icon"
+        android:layout_width="@dimen/login_icon_width"
+        android:layout_height="@dimen/login_icon_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        style="@style/login_text"
+        android:hint="@string/login_user_name"
+        app:met_baseColor="@color/md_black_1000" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        style="@style/login_text"
+        android:hint="@string/login_passwd"
+        app:met_baseColor="@color/md_black_1000" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:layout_marginLeft="@dimen/login_side_margin"
+        android:layout_marginRight="@dimen/login_side_margin"
+        android:orientation="horizontal">
+
+        <com.gc.materialdesign.views.CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#1E88E5"
+            materialdesign:check="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/login_third_line_height"
+            android:layout_gravity="center_vertical"
+            android:text="@string/record_passwd" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/login_register"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/login_third_line_height"
+            android:layout_gravity="center_vertical"
+            android:text="@string/fast_register" />
+    </LinearLayout>
+
+    <com.gc.materialdesign.views.ButtonFlat
         android:id="@+id/login_btn_login"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Test"
+        android:background="@color/black_button"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/login_button" />
+
+    <Button
         android:id="@+id/login_btn_test"
-        android:layout_gravity="center_horizontal" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Test" />
 </LinearLayout>

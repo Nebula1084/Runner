@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/divider"
+            android:orientation="vertical"
+            android:showDividers="middle|beginning|end">
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/item_category" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <com.gc.materialdesign.views.ButtonRectangle
+                    android:id="@+id/publish_category_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/grey"
+                    android:text="@string/publish_category_pick"
+                    android:textColor="@color/black_button" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/location_pick" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/publish_location_pick_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/locaiton_delivery"
+                    android:layout_gravity="center_vertical"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+                <ImageView
+                    android:id="@+id/publish_location_delivery_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"/>
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/time_pick" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <com.gc.materialdesign.views.ButtonRectangle
+                    android:id="@+id/publish_time_pick_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/grey"
+                    android:text="@string/time_picker"
+                    android:textColor="@color/black_button" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/time_delivery" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <com.gc.materialdesign.views.ButtonRectangle
+                    android:id="@+id/publish_time_delivery_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/grey"
+                    android:text="@string/time_picker"
+                    android:textColor="@color/black_button" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/publish_emergency" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <RatingBar
+                    android:id="@+id/publish_emergency_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="3"
+                    android:rating="2" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/publish_pay" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <com.gc.materialdesign.views.ButtonRectangle
+                    android:id="@+id/publish_pay_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/grey"
+                    android:text="@string/pay_picker"
+                    android:textColor="@color/black_button" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/publish_consignee" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <com.gc.materialdesign.views.ButtonRectangle
+                    android:id="@+id/publish_consignee_picker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/grey"
+                    android:text="@string/account_picker"
+                    android:textColor="@color/black_button" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/runner_primary_button_height"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/publish_btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/black_button"
+            android:text="@string/publish_cancel"
+            android:textSize="30sp"/>
+
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/publish_btn_confifrm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/black_button"
+            android:text="@string/publish_confirm"
+            android:textSize="30sp"/>
+    </LinearLayout>
+
+</LinearLayout>
