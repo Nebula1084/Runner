@@ -47,19 +47,21 @@ dependencies {
         transitive = true
     }
     compile 'com.github.AndroidDeveloperLB:MaterialPreferenceLibrary:5'
-
     compile 'com.jakewharton:butterknife:7.0.1'
-
     compile 'com.android.support:support-v4:21.0.3'
-
     compile 'com.afollestad:material-dialogs:0.6.4.0@aar'
     compile 'com.journeyapps:zxing-android-embedded:3.0.2@aar'
     compile 'com.google.zxing:core:3.2.0'
     compile 'com.joanzapata.iconify:android-iconify-fontawesome:2.2.2'
     compile 'com.joanzapata.iconify:android-iconify-material-community:2.2.2'
-
     // for QR module
     compile 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
     compile 'com.google.zxing:core:3.2.1'
-    compile 'com.android.support:appcompat-v7:23.1.0'   // Version 23+ is required
+    compile 'com.android.support:appcompat-v7:23.1.0'
+    // Version 23+ is required
+
+    // for MAP module
+    compile files('libs/AMap_2DMap_V2.8.1_20160202.jar')
+    compile files('libs/AMap_Location_v2.3.0_20160112.jar')
+    compile files('libs/AMap_Search_V3.2.1_20160308.jar.jar')
 }
