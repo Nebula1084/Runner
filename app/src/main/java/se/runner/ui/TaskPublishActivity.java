@@ -1,11 +1,14 @@
 package se.runner.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.RatingBar;
+import android.widget.Toast;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -17,6 +20,8 @@ import se.runner.R;
 import se.runner.widget.RunnerTimePicker;
 
 public class TaskPublishActivity extends AppCompatActivity {
+    final public static int TASK_PICK_LOCATION = 0x000A;
+    final public static int TASK_DELIVERY_LOCATION = 0x000B;
 
     @Bind(R.id.tool_bar)
     Toolbar toolbar;
@@ -68,12 +73,14 @@ public class TaskPublishActivity extends AppCompatActivity {
 
     @OnClick(R.id.publish_location_pick_picker)
     void pickPickLocation() {
-
+        Intent intent = new Intent(TaskPublishActivity.this, MapActivity.class);
+        startActivityForResult(intent, TASK_PICK_LOCATION);
     }
 
     @OnClick(R.id.publish_location_delivery_picker)
     void pickDeliveryLocation() {
-
+        Intent intent = new Intent(TaskPublishActivity.this, MapActivity.class);
+        startActivityForResult(intent, TASK_DELIVERY_LOCATION);
     }
 
     @OnClick(R.id.publish_time_pick_picker)
@@ -94,6 +101,28 @@ public class TaskPublishActivity extends AppCompatActivity {
     @OnClick(R.id.publish_consignee_picker)
     void pickConsignee() {
 
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK)
+            return;
+        switch (requestCode) {
+            case TASK_PICK_LOCATION:
+                Toast.makeText(this,
+                        "取货点{经度:" +
+                                data.getFloatExtra(MapActivity.LONGITUDE, -1) +
+                                ",纬度:" + data.getFloatExtra(MapActivity.LATITUDE, -1) + "}",
+                        Toast.LENGTH_LONG).show();
+                break;
+            case TASK_DELIVERY_LOCATION:
+                Toast.makeText(this,
+                        "收获点{经度:" +
+                                data.getFloatExtra(MapActivity.LONGITUDE, -1) +
+                                ",纬度:" + data.getFloatExtra(MapActivity.LATITUDE, -1) + "}",
+                        Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 
     @Override

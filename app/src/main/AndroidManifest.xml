@@ -27,10 +27,21 @@
             android:name=".test.TestActivity"
             android:label="@string/title_activity_main" />
         <activity android:name=".test.TestUserModule" />
-        <activity android:name=".ui.TaskPublishActivity" />
+
+        <activity
+            android:name=".ui.TaskPublishActivity"
+            android:label="@string/task_publish" />
+
         <activity
             android:name=".ui.RegisterActivity"
-            android:label="@string/fast_register"/>
+            android:label="@string/fast_register" />
+        <activity
+            android:name=".ui.ScanActivity"
+            android:label="@string/scan_qrcode" />
+
+        <activity
+            android:name=".ui.MapActivity"
+            android:label="@string/pick_location" />
     </application>
 
 </manifest>

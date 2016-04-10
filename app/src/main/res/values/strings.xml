@@ -38,4 +38,13 @@
     <string name="not_delivered">待收货</string>
     <string name="task_finished">已完成</string>
     <string name="task_unavailable">已失效</string>
+    <string name="register_passwd_reconfirm">确认密码:</string>
+    <string name="register_nickname">昵称</string>
+    <string name="register_address">联系地址:</string>
+    <string name="register_cancel">取消注册</string>
+    <string name="register_confirm">确认注册</string>
+    <string name="register_set_image">选择图片</string>
+    <string name="scan_qrcode">扫描二维码</string>
+    <string name="task_publish">任务发布</string>
+    <string name="pick_location">选择位置</string>
 </resources>
