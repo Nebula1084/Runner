@@ -1,27 +1,47 @@
 package se.runner.ui;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.Interpolator;
+import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps2d.AMap;
+import com.amap.api.maps2d.CameraUpdateFactory;
 import com.amap.api.maps2d.LocationSource;
 import com.amap.api.maps2d.MapView;
+import com.amap.api.maps2d.Projection;
 import com.amap.api.maps2d.model.BitmapDescriptorFactory;
 import com.amap.api.maps2d.model.LatLng;
+import com.amap.api.maps2d.model.Marker;
 import com.amap.api.maps2d.model.MarkerOptions;
 import com.amap.api.maps2d.model.MyLocationStyle;
+import com.amap.api.services.core.AMapException;
+import com.amap.api.services.core.LatLonPoint;
+import com.amap.api.services.geocoder.GeocodeAddress;
+import com.amap.api.services.geocoder.GeocodeQuery;
+import com.amap.api.services.geocoder.GeocodeResult;
+import com.amap.api.services.geocoder.GeocodeSearch;
+import com.amap.api.services.geocoder.RegeocodeQuery;
+import com.amap.api.services.geocoder.RegeocodeResult;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -32,7 +52,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import se.runner.R;
 
-public class MapActivity extends AppCompatActivity implements LocationSource,AMapLocationListener{
+public class MapActivity extends AppCompatActivity implements LocationSource,
+        AMapLocationListener,GeocodeSearch.OnGeocodeSearchListener,AMap.OnMarkerDragListener,
+        AMap.OnMarkerClickListener
+{
     final public static String LONGITUDE = "longitude";
     final public static String LATITUDE = "latitude";
 
@@ -41,6 +64,15 @@ public class MapActivity extends AppCompatActivity implements LocationSource,AMa
     private LocationSource.OnLocationChangedListener mListener;
     private AMapLocationClient mlocationClient;
     private AMapLocationClientOption mLocationOption;
+
+    private ProgressDialog progDialog = null;
+    private GeocodeSearch geocoderSearch;
+    private String addressName;
+    private Marker geoMarker;
+    private Marker regeoMarker;
+    private LatLonPoint latLonPoint = new LatLonPoint(40.003662, 116.465271);
+
+    private Double selfLatitude,selfLongtitude;
 
 
     private Intent result;
@@ -57,6 +89,7 @@ public class MapActivity extends AppCompatActivity implements LocationSource,AMa
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
 
         AMapLocationClient.setApiKey("6fb01cc4afb8c3c461b106a89d16d558");
 
@@ -80,8 +113,25 @@ public class MapActivity extends AppCompatActivity implements LocationSource,AMa
         if( aMap == null)
         {
             aMap = mapView.getMap();
+            geoMarker = aMap.addMarker(new MarkerOptions().anchor(0.5f,0.5f)
+                    .title("hello")
+                    .position(new LatLng(30.761609, 120.122645))
+                    .draggable(true));
+
+            regeoMarker = aMap.addMarker(new MarkerOptions().anchor(0.5f,0.5f)
+                    .title("map")
+                    .position(new LatLng(31.761609, 120.122645))
+                    .draggable(true));
+//
+//            if( geoMarker.isDraggable() == false)
+//                Log.e("??","I set it draggable!!!");
+
             setUpMap();
         }
+
+        geocoderSearch = new GeocodeSearch(this);
+        geocoderSearch.setOnGeocodeSearchListener(this);
+        progDialog = new ProgressDialog(this);
     }
 
     private void setUpMap()
@@ -102,7 +152,10 @@ public class MapActivity extends AppCompatActivity implements LocationSource,AMa
         // aMap.setMyLocationType()
 
         // set marker
-        addMarkersToMap();
+
+        aMap.setOnMarkerDragListener(this);// 设置marker可拖拽事件监听器
+        aMap.setOnMarkerClickListener(this);
+
 
     }
 
@@ -144,6 +197,12 @@ public class MapActivity extends AppCompatActivity implements LocationSource,AMa
             if (amapLocation != null && amapLocation.getErrorCode() == 0)
             {
                 mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+
+                selfLatitude = amapLocation.getLatitude();
+                selfLongtitude = amapLocation.getLongitude();
+
+//                Log.e("latitude",""+selfLatitude);
+//                Log.e("longtitude",""+selfLongtitude);
             }
             else
             {
@@ -200,15 +259,292 @@ public class MapActivity extends AppCompatActivity implements LocationSource,AMa
         mlocationClient = null;
     }
 
-    private void addMarkersToMap()
+    public void showDialog() {
+        progDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progDialog.setIndeterminate(false);
+        progDialog.setCancelable(true);
+        progDialog.setMessage("正在获取地址");
+        progDialog.show();
+    }
+
+    public void dismissDialog() {
+        if (progDialog != null) {
+            progDialog.dismiss();
+        }
+    }
+
+    public void getLatlon(final String name)
     {
-        aMap.addMarker(new MarkerOptions().anchor(0.5f, 0.5f)
-                .position(new LatLng(31.238068, 121.501654)).title("您的配送员")
-                .snippet("Test").draggable(false));
+        showDialog();
+        GeocodeQuery query = new GeocodeQuery(name, "010");// 第一个参数表示地址，第二个参数表示查询城市，中文或者中文全拼，citycode、adcode，
+        geocoderSearch.getFromLocationNameAsyn(query);// 设置同步地理编码请求
+    }
+
+    public void getAddress(final LatLonPoint latLonPoint)
+    {
+        showDialog();
+        RegeocodeQuery query = new RegeocodeQuery(latLonPoint, 200,
+                GeocodeSearch.AMAP);// 第一个参数表示一个Latlng，第二参数表示范围多少米，第三个参数表示是火系坐标系还是GPS原生坐标系
+        geocoderSearch.getFromLocationAsyn(query);// 设置同步逆地理编码请求
+    }
+
+    /**
+     * 地理编码查询回调
+     */
+    @Override
+    public void onGeocodeSearched(GeocodeResult result, int rCode)
+    {
+        dismissDialog();
+        if (rCode == 1000)
+        {
+            if (result != null && result.getGeocodeAddressList() != null
+                    && result.getGeocodeAddressList().size() > 0)
+            {
+                GeocodeAddress address = result.getGeocodeAddressList().get(0);
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(convertToLatLng(address.getLatLonPoint()), 15));
+
+                geoMarker.setPosition(convertToLatLng(address
+                        .getLatLonPoint()));
+                addressName = "经纬度值:" + address.getLatLonPoint() + "\n位置描述:"
+                        + address.getFormatAddress();
+                show(MapActivity.this, addressName);
+            }
+            else
+            {
+                show(MapActivity.this, "no result");
+            }
+
+        }
+        else
+        {
+            showerror(MapActivity.this, rCode);
+        }
+    }
+
+    /**
+     * 逆地理编码回调
+     */
+    @Override
+    public void onRegeocodeSearched(RegeocodeResult result, int rCode)
+    {
+        dismissDialog();
+        if (rCode == 1000)
+        {
+            if (result != null && result.getRegeocodeAddress() != null
+                    && result.getRegeocodeAddress().getFormatAddress() != null)
+            {
+                addressName = result.getRegeocodeAddress().getFormatAddress()
+                        + "附近";
+                aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
+                        convertToLatLng(latLonPoint), 15));
+                regeoMarker.setPosition(convertToLatLng(latLonPoint));
+                regeoMarker.setTitle("您的位置");
+                regeoMarker.setSnippet(addressName);
+                show(MapActivity.this, addressName);
+            }
+            else
+            {
+                show(MapActivity.this, "no result");
+            }
+        }
+        else
+        {
+            showerror(MapActivity.this, rCode);
+        }
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker)
+    {
+        jumpPoint(marker);
+        return true;
+    }
+
+    /**
+     * marker点击时跳动一下
+     */
+    public void jumpPoint(final Marker marker)
+    {
+        final Handler handler = new Handler();
+        final long start = SystemClock.uptimeMillis();
+        Projection proj = aMap.getProjection();
+        Point startPoint = proj.toScreenLocation(geoMarker.getPosition());
+        startPoint.offset(0, -100);
+        final LatLng startLatLng = proj.fromScreenLocation(startPoint);
+        final long duration = 1500;
+
+        final Interpolator interpolator = new BounceInterpolator();
+        handler.post(new Runnable() {
+            @Override
+            public void run()
+            {
+                long elapsed = SystemClock.uptimeMillis() - start;
+                float t = interpolator.getInterpolation((float) elapsed
+                        / duration);
+                double lng = t * geoMarker.getPosition().longitude + (1 - t)
+                        * startLatLng.longitude;
+                double lat = t * geoMarker.getPosition().latitude + (1 - t)
+                        * startLatLng.latitude;
+                marker.setPosition(new LatLng(lat, lng));
+                aMap.invalidate();// 刷新地图
+                if (t < 1.0) {
+                    handler.postDelayed(this, 16);
+                }
+            }
+        });
+
+    }
+
+    @Override
+    public void onMarkerDragStart(Marker marker)
+    {
+        Log.e("marker","you start drag at ("+marker.getPosition().latitude+","+marker.getPosition().longitude+")");
+    }
+
+    @Override
+    public void onMarkerDrag(Marker marker)
+    {
+        latLonPoint.setLatitude(marker.getPosition().latitude);
+        latLonPoint.setLongitude(marker.getPosition().longitude);
+    }
+
+    @Override
+    public void onMarkerDragEnd(Marker marker)
+    {
+        Log.e("marker","you end dragging at ("+marker.getPosition().latitude+","+marker.getPosition().longitude+")");
+        getAddress(latLonPoint);
     }
 
 
+
+
+
+    public static LatLng convertToLatLng(LatLonPoint latLonPoint)
+    {
+        return new LatLng(latLonPoint.getLatitude(), latLonPoint.getLongitude());
+    }
+
+
+
     // for debug
+    public static void show(Context context, String info) {
+        Toast.makeText(context, info, Toast.LENGTH_LONG).show();
+    }
+
+    public static void showerror(Context context, int rCode){
+        try {
+            switch (rCode) {
+                //服务错误码
+                case 1001:
+                    throw new AMapException(AMapException.AMAP_SIGNATURE_ERROR);
+                case 1002:
+                    throw new AMapException(AMapException.AMAP_INVALID_USER_KEY);
+                case 1003:
+                    throw new AMapException(AMapException.AMAP_SERVICE_NOT_AVAILBALE);
+                case 1004:
+                    throw new AMapException(AMapException.AMAP_DAILY_QUERY_OVER_LIMIT);
+                case 1005:
+                    throw new AMapException(AMapException.AMAP_ACCESS_TOO_FREQUENT);
+                case 1006:
+                    throw new AMapException(AMapException.AMAP_INVALID_USER_IP);
+                case 1007:
+                    throw new AMapException(AMapException.AMAP_INVALID_USER_DOMAIN);
+                case 1008:
+                    throw new AMapException(AMapException.AMAP_INVALID_USER_SCODE);
+                case 1009:
+                    throw new AMapException(AMapException.AMAP_USERKEY_PLAT_NOMATCH);
+                case 1010:
+                    throw new AMapException(AMapException.AMAP_IP_QUERY_OVER_LIMIT);
+                case 1011:
+                    throw new AMapException(AMapException.AMAP_NOT_SUPPORT_HTTPS);
+                case 1012:
+                    throw new AMapException(AMapException.AMAP_INSUFFICIENT_PRIVILEGES);
+                case 1013:
+                    throw new AMapException(AMapException.AMAP_USER_KEY_RECYCLED);
+                case 1100:
+                    throw new AMapException(AMapException.AMAP_ENGINE_RESPONSE_ERROR);
+                case 1101:
+                    throw new AMapException(AMapException.AMAP_ENGINE_RESPONSE_DATA_ERROR);
+                case 1102:
+                    throw new AMapException(AMapException.AMAP_ENGINE_CONNECT_TIMEOUT);
+                case 1103:
+                    throw new AMapException(AMapException.AMAP_ENGINE_RETURN_TIMEOUT);
+                case 1200:
+                    throw new AMapException(AMapException.AMAP_SERVICE_INVALID_PARAMS);
+                case 1201:
+                    throw new AMapException(AMapException.AMAP_SERVICE_MISSING_REQUIRED_PARAMS);
+                case 1202:
+                    throw new AMapException(AMapException.AMAP_SERVICE_ILLEGAL_REQUEST);
+                case 1203:
+                    throw new AMapException(AMapException.AMAP_SERVICE_UNKNOWN_ERROR);
+                    //sdk返回错误
+                case 1800:
+                    throw new AMapException(AMapException.AMAP_CLIENT_ERRORCODE_MISSSING);
+                case 1801:
+                    throw new AMapException(AMapException.AMAP_CLIENT_ERROR_PROTOCOL);
+                case 1802:
+                    throw new AMapException(AMapException.AMAP_CLIENT_SOCKET_TIMEOUT_EXCEPTION);
+                case 1803:
+                    throw new AMapException(AMapException.AMAP_CLIENT_URL_EXCEPTION);
+                case 1804:
+                    throw new AMapException(AMapException.AMAP_CLIENT_UNKNOWHOST_EXCEPTION);
+                case 1806:
+                    throw new AMapException(AMapException.AMAP_CLIENT_NETWORK_EXCEPTION);
+                case 1900:
+                    throw new AMapException(AMapException.AMAP_CLIENT_UNKNOWN_ERROR);
+                case 1901:
+                    throw new AMapException(AMapException.AMAP_CLIENT_INVALID_PARAMETER);
+                case 1902:
+                    throw new AMapException(AMapException.AMAP_CLIENT_IO_EXCEPTION);
+                case 1903:
+                    throw new AMapException(AMapException.AMAP_CLIENT_NULLPOINT_EXCEPTION);
+                    //云图和附近错误码
+                case 2000:
+                    throw new AMapException(AMapException.AMAP_SERVICE_TABLEID_NOT_EXIST);
+                case 2001:
+                    throw new AMapException(AMapException.AMAP_ID_NOT_EXIST);
+                case 2002:
+                    throw new AMapException(AMapException.AMAP_SERVICE_MAINTENANCE);
+                case 2003:
+                    throw new AMapException(AMapException.AMAP_ENGINE_TABLEID_NOT_EXIST);
+                case 2100:
+                    throw new AMapException(AMapException.AMAP_NEARBY_INVALID_USERID);
+                case 2101:
+                    throw new AMapException(AMapException.AMAP_NEARBY_KEY_NOT_BIND);
+                case 2200:
+                    throw new AMapException(AMapException.AMAP_CLIENT_UPLOADAUTO_STARTED_ERROR);
+                case 2201:
+                    throw new AMapException(AMapException.AMAP_CLIENT_USERID_ILLEGAL);
+                case 2202:
+                    throw new AMapException(AMapException.AMAP_CLIENT_NEARBY_NULL_RESULT);
+                case 2203:
+                    throw new AMapException(AMapException.AMAP_CLIENT_UPLOAD_TOO_FREQUENT);
+                case 2204:
+                    throw new AMapException(AMapException.AMAP_CLIENT_UPLOAD_LOCATION_ERROR);
+                    //路径规划
+                case 3000:
+                    throw new AMapException(AMapException.AMAP_ROUTE_OUT_OF_SERVICE);
+                case 3001:
+                    throw new AMapException(AMapException.AMAP_ROUTE_NO_ROADS_NEARBY);
+                case 3002:
+                    throw new AMapException(AMapException.AMAP_ROUTE_FAIL);
+                case 3003:
+                    throw new AMapException(AMapException.AMAP_OVER_DIRECTION_RANGE);
+                    //短传分享
+                case 4000:
+                    throw new AMapException(AMapException.AMAP_SHARE_LICENSE_IS_EXPIRED);
+                case 4001:
+                    throw new AMapException(AMapException.AMAP_SHARE_FAILURE);
+                default:
+                    Toast.makeText(context,"错误码："+rCode , Toast.LENGTH_LONG).show();
+                    break;
+            }
+        } catch (Exception e) {
+            Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+
     public static String sHA1(Context context)
     {
         try
@@ -255,7 +591,10 @@ public class MapActivity extends AppCompatActivity implements LocationSource,AMa
     }
 
     @OnClick(R.id.map_confirm)
-    void confirm() {
+    void confirm()
+    {
+
+
         setResult(RESULT_OK, result);
         finish();
     }
