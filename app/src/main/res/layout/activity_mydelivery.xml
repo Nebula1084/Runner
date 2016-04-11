@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+
+    </android.support.v7.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/divider"
+            android:orientation="vertical"
+            android:showDividers="middle|beginning|end">
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="订单码:" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <ImageView
+                    android:id="@+id/mydelivery_task_id"
+                    style="@style/task_item_icon" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/location_pick" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/mydelivery_pick_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:checked="true"
+                    android:clickable="false"
+                    />
+
+                <ImageView
+                    android:id="@+id/mydelivery_location_pick_picker"
+                    style="@style/task_item_icon" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/locaiton_delivery" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <CheckBox
+                    android:id="@+id/mydelivery_delivery_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:editable="false"
+                    android:layout_gravity="center_vertical"/>
+
+                <ImageView
+                    android:id="@+id/mydelivery_location_delivery_picker"
+                    style="@style/task_item_icon" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/locaiton_delivery" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/locaiton_delivery" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="发布时间" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="发布时间:" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/publish_pay" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/publish_pay" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

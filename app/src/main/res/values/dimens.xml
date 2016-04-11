@@ -8,5 +8,6 @@
     <dimen name="login_side_margin">20dp</dimen>
     <dimen name="runner_primary_button_height">50dp</dimen>
     <dimen name="publish_layout_item_height">50dp</dimen>
+    <dimen name="item_task_height">90dp</dimen>
 
 </resources>

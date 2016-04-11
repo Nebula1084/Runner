@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary">
+
+    </android.support.v7.widget.Toolbar>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@drawable/divider"
+            android:orientation="vertical"
+            android:showDividers="middle|beginning|end">
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/location_pick" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/accept_location_pick"
+                    style="@style/publsh_text_item"
+                    android:text="@string/location_pick" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/time_pick" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/accept_time_pick"
+                    style="@style/publsh_text_item"
+                    android:text="@string/time_pick" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/locaiton_delivery" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/accept_location_delivery"
+                    style="@style/publsh_text_item"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/locaiton_delivery" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/time_delivery" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/accept_time_delivery"
+                    style="@style/publsh_text_item"
+                    android:text="@string/time_delivery" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/item_category" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/accept_category"
+                    style="@style/publsh_text_item"
+                    android:text="@string/item_category" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/publish_emergency" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <RatingBar
+                    android:id="@+id/accept_emergency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:numStars="3"
+                    android:rating="2" />
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/publish_pay" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/accept_pay"
+                    style="@style/publsh_text_item"
+                    android:text="@string/publish_pay" />
+
+            </LinearLayout>
+
+            <LinearLayout style="@style/publish_layout_item">
+
+                <TextView
+                    style="@style/publsh_text_item"
+                    android:text="@string/publish_consignee" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/accept_consignee"
+                    style="@style/publsh_text_item"
+                    android:text="@string/publish_consignee" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/runner_primary_button_height"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
+
+        <com.gc.materialdesign.views.ButtonFlat
+            android:id="@+id/accept_btn_confifrm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/black_button"
+            android:text="抢单"
+            android:textSize="30sp" />
+    </LinearLayout>
+</LinearLayout>

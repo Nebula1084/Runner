@@ -1,7 +1,6 @@
 package se.runner.ui;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -13,10 +12,10 @@ import se.runner.R;
 import se.runner.task.Task;
 import se.runner.widget.TaskListFragment;
 
-public class TaskSquareFragment extends TaskListFragment implements TaskListFragment.OnRefreshListener, AdapterView.OnItemClickListener {
-    public TaskSquareFragment() {
+public class MyDeliveryListFragment extends TaskListFragment implements TaskListFragment.OnRefreshListener, AdapterView.OnItemClickListener {
+    public MyDeliveryListFragment() {
         super();
-        setItemRsId(R.layout.item_task_large);
+        setItemRsId(R.layout.item_task_small);
         setOnRefreshListener(this);
         setOnItemClickListener(this);
         /*for test*/
@@ -37,7 +36,7 @@ public class TaskSquareFragment extends TaskListFragment implements TaskListFrag
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(getContext(), TaskAcceptActivity.class);
+        Intent intent = new Intent(getContext(), MyDeliveryActivity.class);
         intent.putExtra(Task.class.getName(), (Task) parent.getAdapter().getItem(position));
         startActivity(intent);
     }
