@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import io.karim.MaterialTabs;
 import se.runner.R;
+import se.runner.widget.TaskListFragment;
 
 public class MyTaskFragment extends Fragment {
 
@@ -20,14 +21,14 @@ public class MyTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mytask, container, false);
-        mytask_tabs=(MaterialTabs)view.findViewById(R.id.mytask_tabs);
-        mytask_view_pager=(ViewPager)view.findViewById(R.id.mytask_view_pager);
+        mytask_tabs = (MaterialTabs) view.findViewById(R.id.mytask_tabs);
+        mytask_view_pager = (ViewPager) view.findViewById(R.id.mytask_view_pager);
 
-        runnerPagerAdapter=new RunnerPagerAdapter(getContext(), getChildFragmentManager());
-        runnerPagerAdapter.setItem(getContext().getString(R.string.all_task),new TaskListFragment(),null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.not_delivered),new TaskListFragment(),null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.task_finished),new TaskListFragment(),null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.task_unavailable),new TaskListFragment(),null);
+        runnerPagerAdapter = new RunnerPagerAdapter(getContext(), getChildFragmentManager());
+        runnerPagerAdapter.setItem(getContext().getString(R.string.all_task), TaskListFragment.newInstance(R.layout.item_task_small), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.not_delivered), TaskListFragment.newInstance(R.layout.item_task_small), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.task_finished), TaskListFragment.newInstance(R.layout.item_task_small), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.task_unavailable), TaskListFragment.newInstance(R.layout.item_task_small), null);
 
         mytask_view_pager.setAdapter(runnerPagerAdapter);
         mytask_tabs.setViewPager(mytask_view_pager);

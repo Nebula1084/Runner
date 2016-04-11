@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import io.karim.MaterialTabs;
 import se.runner.R;
+import se.runner.widget.TaskListFragment;
 
 public class MyDeliveryFragment extends Fragment {
 
@@ -20,13 +21,13 @@ public class MyDeliveryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_mydelivery, container, false);
-        mydelivery_tabs=(MaterialTabs)view.findViewById(R.id.mydelivery_tabs);
-        mydelivery_view_pager=(ViewPager)view.findViewById(R.id.mydelivery_view_pager);
+        mydelivery_tabs = (MaterialTabs) view.findViewById(R.id.mydelivery_tabs);
+        mydelivery_view_pager = (ViewPager) view.findViewById(R.id.mydelivery_view_pager);
 
-        runnerPagerAdapter=new RunnerPagerAdapter(getContext(), getChildFragmentManager());
-        runnerPagerAdapter.setItem(getContext().getString(R.string.all_delivey),new TaskListFragment(),null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.deliverying),new TaskListFragment(),null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.deliveryed),new TaskListFragment(),null);
+        runnerPagerAdapter = new RunnerPagerAdapter(getContext(), getChildFragmentManager());
+        runnerPagerAdapter.setItem(getContext().getString(R.string.all_delivey), TaskListFragment.newInstance(R.layout.item_task_small), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.deliverying), TaskListFragment.newInstance(R.layout.item_task_small), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.deliveryed), TaskListFragment.newInstance(R.layout.item_task_small), null);
         mydelivery_view_pager.setAdapter(runnerPagerAdapter);
         mydelivery_tabs.setViewPager(mydelivery_view_pager);
         return view;
