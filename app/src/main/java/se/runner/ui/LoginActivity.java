@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 .with(new FontAwesomeModule())
                 .with(new MaterialCommunityModule());
         login_icon.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_user));
+        login();
     }
 
 }

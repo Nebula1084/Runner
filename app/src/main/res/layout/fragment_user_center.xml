@@ -1,11 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:divider="@drawable/divider"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:showDividers="middle">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/user_center"
-        android:layout_gravity="center_horizontal" />
+    <ImageView
+        android:id="@+id/user_icon"
+        android:layout_width="@dimen/login_icon_width"
+        android:layout_height="@dimen/login_icon_height"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp" />
+
+    <LinearLayout style="@style/user_layout_item">
+
+        <TextView
+            style="@style/user_text_item"
+            android:text="昵称" />
+
+        <ImageView
+            android:id="@+id/user_edit"
+            style="@style/user_item_icon"
+            android:tint="@color/md_black_1000" />
+    </LinearLayout>
+
+    <LinearLayout style="@style/user_layout_item">
+
+        <ImageView
+            android:id="@+id/user_phone_call"
+            style="@style/user_item_icon"
+            android:tint="@color/md_black_1000" />
+
+        <TextView
+            style="@style/user_text_item"
+            android:text="157****6900" />
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/user_layout_item"
+        android:divider="@drawable/divider"
+        android:padding="5dp"
+        android:showDividers="middle">
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginRight="20dp">
+
+            <TextView
+                style="@style/user_text_item"
+                android:layout_marginRight="10dp"
+                android:text="配送:" />
+
+            <TextView
+                android:id="@+id/user_delivery"
+                style="@style/user_text_item"
+                android:text="5" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="20dp">
+
+            <TextView
+                style="@style/user_text_item"
+                android:layout_marginRight="10dp"
+                android:text="发起:" />
+
+            <TextView
+                android:id="@+id/user_publish"
+                style="@style/user_text_item"
+                android:text="10" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/user_address"
+        style="@style/user_layout_item">
+
+        <TextView
+            style="@style/user_text_item"
+            android:text="常用地址" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/user_contacts_arrow"
+            style="@style/user_item_icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/user_contacts"
+        style="@style/user_layout_item">
+
+        <TextView
+            style="@style/user_text_item"
+            android:text="联系人" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/user_address_arrow"
+            style="@style/user_item_icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/user_logout"
+        style="@style/user_layout_item">
+
+        <ImageView
+            android:id="@+id/user_logout_arrow"
+            style="@style/user_item_icon" />
+
+        <TextView
+            style="@style/user_text_item"
+            android:text="退出登录" />
+    </LinearLayout>
+
 </LinearLayout>

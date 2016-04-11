@@ -20,6 +20,13 @@
         <item name="android:orientation">horizontal</item>
     </style>
 
+    <style name="user_layout_item">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">@dimen/publish_layout_item_height</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+
     <style name="publsh_text_item">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -34,5 +41,20 @@
         <item name="android:background">@color/grey</item>
         <item name="android:textColor">@color/black_button</item>
         <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="user_item_icon">
+        <item name="android:layout_height">@dimen/publish_layout_item_height</item>
+        <item name="android:layout_width">@dimen/publish_layout_item_height</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:tint">@color/md_black_1000</item>
+    </style>
+
+    <style name="user_text_item" >
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_gravity">center_vertical</item>
+        <item name="android:textColor">@color/black_button</item>
+        <item name="android:textSize">18sp</item>
     </style>
 </resources>
