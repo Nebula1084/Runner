@@ -61,6 +61,12 @@
         <activity
             android:name=".ui.ContactActivity"
             android:label="@string/contacts"/>
+        <activity android:name=".ui.TaskAcceptActivity"
+            android:label="@string/task_accept"/>
+        <activity android:name=".ui.MyDeliveryActivity"
+            android:label="@string/my_delivery"/>
+        <activity android:name=".ui.MyTaskActivity"
+            android:label="@string/my_task"/>
         <activity android:name=".widget.CaptureActivityAnyOrientation">
         </activity>
 

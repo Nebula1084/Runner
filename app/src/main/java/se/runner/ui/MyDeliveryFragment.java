@@ -25,9 +25,9 @@ public class MyDeliveryFragment extends Fragment {
         mydelivery_view_pager = (ViewPager) view.findViewById(R.id.mydelivery_view_pager);
 
         runnerPagerAdapter = new RunnerPagerAdapter(getContext(), getChildFragmentManager());
-        runnerPagerAdapter.setItem(getContext().getString(R.string.all_delivey), TaskListFragment.newInstance(R.layout.item_task_small), null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.deliverying), TaskListFragment.newInstance(R.layout.item_task_small), null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.deliveryed), TaskListFragment.newInstance(R.layout.item_task_small), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.all_delivey), new MyDeliveryListFragment(), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.deliverying), new MyDeliveryListFragment(), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.deliveryed), new MyDeliveryListFragment(), null);
         mydelivery_view_pager.setAdapter(runnerPagerAdapter);
         mydelivery_tabs.setViewPager(mydelivery_view_pager);
         return view;

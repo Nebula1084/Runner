@@ -25,10 +25,10 @@ public class MyTaskFragment extends Fragment {
         mytask_view_pager = (ViewPager) view.findViewById(R.id.mytask_view_pager);
 
         runnerPagerAdapter = new RunnerPagerAdapter(getContext(), getChildFragmentManager());
-        runnerPagerAdapter.setItem(getContext().getString(R.string.all_task), TaskListFragment.newInstance(R.layout.item_task_small), null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.not_delivered), TaskListFragment.newInstance(R.layout.item_task_small), null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.task_finished), TaskListFragment.newInstance(R.layout.item_task_small), null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.task_unavailable), TaskListFragment.newInstance(R.layout.item_task_small), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.all_task), new MyTaskListFragment(), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.not_delivered), new MyTaskListFragment(), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.task_finished), new MyTaskListFragment(), null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.task_unavailable), new MyTaskListFragment(), null);
 
         mytask_view_pager.setAdapter(runnerPagerAdapter);
         mytask_tabs.setViewPager(mytask_view_pager);

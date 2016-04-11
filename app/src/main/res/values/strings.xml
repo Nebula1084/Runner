@@ -51,4 +51,7 @@
     <string name="delivery_address">收货地址</string>
     <string name="contacts">联系人</string>
     <string name="add_contacts">添加联系人</string>
+    <string name="task_accept">任务接受</string>
+    <string name="my_delivery">我的配送</string>
+    <string name="my_task">我的任务</string>
 </resources>

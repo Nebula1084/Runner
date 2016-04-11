@@ -12,10 +12,10 @@ import se.runner.R;
 import se.runner.task.Task;
 import se.runner.widget.TaskListFragment;
 
-public class TaskSquareFragment extends TaskListFragment implements TaskListFragment.OnRefreshListener, AdapterView.OnItemClickListener {
-    public TaskSquareFragment() {
+public class MyDeliveryListFragment extends TaskListFragment implements TaskListFragment.OnRefreshListener, AdapterView.OnItemClickListener {
+    public MyDeliveryListFragment() {
         super();
-        setItemRsId(R.layout.item_task_large);
+        setItemRsId(R.layout.item_task_small);
         setOnRefreshListener(this);
         setOnItemClickListener(this);
         /*for test*/
@@ -36,6 +36,6 @@ public class TaskSquareFragment extends TaskListFragment implements TaskListFrag
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(getContext(), TaskAcceptActivity.class));
+        startActivity(new Intent(getContext(), MyDeliveryActivity.class));
     }
 }

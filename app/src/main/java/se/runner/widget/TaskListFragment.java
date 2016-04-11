@@ -10,25 +10,34 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.util.List;
+
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import se.runner.R;
+import se.runner.task.Task;
 
 
-public class TaskListFragment extends Fragment implements PtrHandler{
+public class TaskListFragment extends Fragment implements PtrHandler {
     private ListView task_list;
-    private BaseAdapter adapter;
+    private TaskListAdapter adapter;
     private AdapterView.OnItemClickListener onItemClickListener;
     private PtrFrameLayout task_list_ptr_frame;
     private int itemRsId;
+    private OnRefreshListener onRefreshListener;
+    List<Task> tasks;
 
-    public TaskListFragment(){
+    public interface OnRefreshListener {
+        void onRefresh();
+    }
+
+    public TaskListFragment() {
         super();
     }
 
-    public static TaskListFragment newInstance(int itemRsId){
+    public static TaskListFragment newInstance(int itemRsId) {
         TaskListFragment instance = new TaskListFragment();
         instance.setItemRsId(itemRsId);
         return instance;
@@ -38,28 +47,55 @@ public class TaskListFragment extends Fragment implements PtrHandler{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         task_list = (ListView) view.findViewById(R.id.task_list);
-        task_list_ptr_frame=(PtrFrameLayout) view.findViewById(R.id.task_list_ptr_frame);
+        task_list_ptr_frame = (PtrFrameLayout) view.findViewById(R.id.task_list_ptr_frame);
         StoreHouseHeader header = new StoreHouseHeader(getContext());
         task_list_ptr_frame.setHeaderView(header);
         task_list_ptr_frame.setPtrHandler(this);
-        setAdapter(new TaskListAdapter(getContext(), this.itemRsId));
-        if (adapter != null)
-            task_list.setAdapter(adapter);
+        if (adapter == null)
+            setAdapter(new TaskListAdapter(getContext(), itemRsId));
+        task_list.setAdapter(adapter);
+        if (tasks != null)
+            adapter.setTasks(tasks);
         if (onItemClickListener != null)
             task_list.setOnItemClickListener(onItemClickListener);
+
         return view;
     }
 
-    void setAdapter(BaseAdapter adapter) {
+    public void setAdapter(TaskListAdapter adapter) {
         this.adapter = adapter;
     }
 
-    void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+    public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
+        this.onRefreshListener = onRefreshListener;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
+    }
+
+    public void addTask(Task task) {
+        adapter.addTask(task);
+    }
+
+    public void removeTask(Task task) {
+        adapter.removeTask(task);
+    }
+
+    public void removeTask(int index) {
+        adapter.removeTask(index);
+    }
+
+    public void update() {
+        adapter.notifyDataSetChanged();
+    }
+
+    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 
-    public void setItemRsId(int itemRsId){
-        this.itemRsId=itemRsId;
+    public void setItemRsId(int itemRsId) {
+        this.itemRsId = itemRsId;
     }
 
     @Override
@@ -69,7 +105,9 @@ public class TaskListFragment extends Fragment implements PtrHandler{
 
     @Override
     public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
-        Toast.makeText(getContext(), "refresh", Toast.LENGTH_LONG).show();
+        if (onRefreshListener != null) {
+            onRefreshListener.onRefresh();
+        }
         ptrFrameLayout.refreshComplete();
     }
 }
