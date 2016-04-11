@@ -90,9 +90,7 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-
         AMapLocationClient.setApiKey("6fb01cc4afb8c3c461b106a89d16d558");
-
 
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
@@ -433,7 +431,8 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
 
     public static void showerror(Context context, int rCode){
         try {
-            switch (rCode) {
+            switch (rCode)
+            {
                 //服务错误码
                 case 1001:
                     throw new AMapException(AMapException.AMAP_SIGNATURE_ERROR);
