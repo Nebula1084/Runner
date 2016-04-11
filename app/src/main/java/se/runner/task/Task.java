@@ -1,9 +1,13 @@
 package se.runner.task;
 
 import android.app.AlertDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import se.runner.request.HttpCallback;
 import se.runner.request.HttpPost;
@@ -24,13 +28,16 @@ public class Task
 
     final private String TAG = "TASK";
     private int id;
-    private int type;
+    private String category;
     private double rate;  // [0~5]
+    private float payment;
+    private int emergency;
     private TaskStatus status;
 
     // use System.currentTimeMillis() may not be safe, but simple
     private long create_timestamp;
     private long release_timestamp;
+    private long delivery_timestamp;
     private long deadline_timestamp;
     private long finish_timestamp;  // finish includes abort or completed
 
@@ -38,14 +45,255 @@ public class Task
     private String description;
 
     private String taskLauncher;
-    private String taskTaker;
-    private String taskCustomer;
+    private String taskShipper;
+    private String taskConsignee;
+
+    private String deliveryAddress;
+    private String receivingAddress;
 
     private Context context;
 
+    // no account validation check, may not safe
+    // once publish successful, a task will be created.
+    public Task(Context ctx,
+                final String taskLauncherAccount,
+                final String taskCategory,
+                final String taskConsigneeAccount,
+                final float pay,
+                final long delivery_time,
+                final long receiving_time,
+                final String delivery_address,
+                final String receiving_address,
+                final int emergencyLevel)
+    {
+        context = ctx;
+
+        taskLauncher = taskLauncherAccount;
+        category = taskCategory;
+        taskConsignee = taskConsigneeAccount;
+        payment = pay;
+        delivery_timestamp = delivery_time;
+        finish_timestamp = receiving_time;
+        deliveryAddress = delivery_address;
+        receivingAddress = receiving_address;
+        emergency = emergencyLevel;
+    }
+
+    public void publish()
+    {
+        HttpCallback httpCallback = new HttpCallback()
+        {
+            @Override
+            public void onPost(String get)
+            {
+                if(get == null )
+                    Log.e(TAG,"create task return null");
+                else if( !get.equals("") )
+                {
+                    Log.e(TAG,"publish task successful");
+                }
+                else
+                {
+                    Log.e(TAG,"publish task failed");
+                    new AlertDialog.Builder(context)
+                            .setTitle("发布任务失败")
+                            .setMessage("我猜多半是网络原因！")
+                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // continue
+                                }
+                            })
+                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                }
+            }
+        };
+
+        ContentValues para = new ContentValues();
+        para.put("account",taskLauncher);
+        para.put("consignee",taskConsignee);
+        para.put("category",category);
+        para.put("pay",payment+"");
+        para.put("delivery_time",delivery_timestamp+"");
+        para.put("receiving_time",finish_timestamp+"");
+        para.put("delivery_address",deliveryAddress);
+        para.put("receiving_address",receivingAddress);
+        para.put("emergency",emergency+"");
+
+        new HttpPost("/publish",para,httpCallback).execute();
+    }
+
+    public void publish( HttpCallback httpCallback )
+    {
+        ContentValues para = new ContentValues();
+        para.put("account",taskLauncher);
+        para.put("consignee",taskConsignee);
+        para.put("category",category);
+        para.put("pay",payment+"");
+        para.put("delivery_time",delivery_timestamp+"");
+        para.put("receiving_time",finish_timestamp+"");
+        para.put("delivery_address",deliveryAddress);
+        para.put("receiving_address",receivingAddress);
+        para.put("emergency",emergency+"");
+
+        new HttpPost("/publish",para,httpCallback).execute();
+    }
+
+    public void findTaskByLauncher(String account, HttpCallback httpCallback )
+    {
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+
+        new HttpPost("/publisherTask",para,httpCallback).execute();
+    }
+
+    public void findTaskByRunner(String account, HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+        new HttpPost("/runnerTask",para, httpCallback).execute();
+    }
+
+    public void findTaskById(int id, HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("tid",id+"");
+        new HttpPost("/gettask",para,httpCallback).execute();
+    }
+
+    public void findAvailableTask(HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+
+        // TODO: 4/4/16 not sure empty para will make the http post work
+        new HttpPost("/availabletask",para,httpCallback).execute();
+    }
+
+    public void accept(String account, int id, HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("tid",id+"");
+        para.put("account",account);
+
+        new HttpPost("/accept",para,httpCallback).execute();
+    }
+
+    public void gaincargo(int id, HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("tid",id+"");
+
+        new HttpPost("/gaincargo",para,httpCallback).execute();
+    }
+
+    public void delivercargo(int id, HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("tid",id+"");
+
+        new HttpPost("/delivercargo",para,httpCallback).execute();
+    }
+
+    public void finish(int id, HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("tid",id+"");
+
+        new HttpPost("/finish",para,httpCallback).execute();
+    }
+
+    public void rate(int id, int rate, String cmt, HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("tid",id+"");
+        para.put("rate",rate+"");
+        para.put("comment",cmt);
+
+        new HttpPost("/rate",para,httpCallback).execute();
+    }
 
 
-    public Task(Context ctx, final String laucherAccountName , final int taskType )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public Task(Context ctx, final String laucherAccountName , final String taskCategory )
     {
         HttpCallback callback = new HttpCallback()
         {
@@ -57,10 +305,8 @@ public class Task
                 else if( get.equals("yes"))
                 {
                     taskLauncher = laucherAccountName;
-                    taskTaker = "undefined";
-                    taskCustomer = "undefined";
 
-                    type = taskType;
+                    category = taskCategory;
                     status = TaskStatus.INIT;
                     create_timestamp = System.currentTimeMillis();
                     id = (int) create_timestamp;
@@ -89,10 +335,14 @@ public class Task
 
 
         context = ctx;
+        taskLauncher = "default_nobody_";
+        taskShipper = "default_nobody_";
+        taskConsignee = "default_nobody_";
+        comment = "default_very_good";
+        description = "default_this is a tough task";
 
         User user = new User(context,laucherAccountName,"check existence");
         user.checkUser(callback);
-
     }
 
     public void startTask()
@@ -115,11 +365,11 @@ public class Task
 
     public void pauseTask()
     {
-        setStatus(TaskStatus.PAUSED);    
+        setStatus(TaskStatus.PAUSED);
         //// TODO: 4/1/16  pause task
         deadline_timestamp = -1;
     }
-    
+
     public void abortTask()
     {
         setStatus(TaskStatus.ABORT);
@@ -196,7 +446,7 @@ public class Task
 
     }
 
-    public void setTaskTaker(final String accountName )
+    public void setTaskShipper(final String accountName)
     {
         HttpCallback callback = new HttpCallback()
         {
@@ -207,7 +457,7 @@ public class Task
                     Log.e(TAG,"set task launcher return null");
                 else if( get.equals("yes"))
                 {
-                    taskTaker = accountName;
+                    taskShipper = accountName;
                 }
                 else if( get.equals("no"))
                 {
@@ -234,7 +484,7 @@ public class Task
         user.checkUser(callback);
     }
 
-    public void setTaskCustomer(final String accountName )
+    public void setTaskConsignee(final String accountName)
     {
         HttpCallback callback = new HttpCallback()
         {
@@ -245,7 +495,7 @@ public class Task
                     Log.e(TAG,"set task launcher return null");
                 else if( get.equals("yes"))
                 {
-                    taskCustomer = accountName;
+                    taskConsignee = accountName;
                 }
                 else if( get.equals("no"))
                 {
