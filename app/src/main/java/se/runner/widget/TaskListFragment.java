@@ -2,6 +2,7 @@ package se.runner.widget;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,13 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import se.runner.R;
 import se.runner.task.Task;
+import se.runner.user.User;
 
 
-public class TaskListFragment extends Fragment implements PtrHandler {
+public class TaskListFragment extends Fragment implements PtrHandler
+{
+    private final static String TAG = "TaskListFragment";
+
     private ListView task_list;
     private TaskListAdapter adapter;
     private AdapterView.OnItemClickListener onItemClickListener;
@@ -28,6 +33,8 @@ public class TaskListFragment extends Fragment implements PtrHandler {
     private int itemRsId;
     private OnRefreshListener onRefreshListener;
     List<Task> tasks;
+
+
 
     public interface OnRefreshListener {
         void onRefresh();
@@ -44,7 +51,8 @@ public class TaskListFragment extends Fragment implements PtrHandler {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         task_list = (ListView) view.findViewById(R.id.task_list);
         task_list_ptr_frame = (PtrFrameLayout) view.findViewById(R.id.task_list_ptr_frame);
@@ -59,6 +67,10 @@ public class TaskListFragment extends Fragment implements PtrHandler {
         if (onItemClickListener != null)
             task_list.setOnItemClickListener(onItemClickListener);
 
+
+
+
+
         return view;
     }
 
@@ -70,8 +82,11 @@ public class TaskListFragment extends Fragment implements PtrHandler {
         this.onRefreshListener = onRefreshListener;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<Task> tasks)
+    {
         this.tasks = tasks;
+        if( adapter != null )
+            adapter.setTasks(this.tasks);
     }
 
     public void addTask(Task task) {
@@ -87,7 +102,10 @@ public class TaskListFragment extends Fragment implements PtrHandler {
     }
 
     public void update() {
-        adapter.notifyDataSetChanged();
+        if( adapter != null )
+            adapter.notifyDataSetChanged();
+        else
+            Log.e(TAG,"adapter is null");
     }
 
     public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
@@ -104,7 +122,8 @@ public class TaskListFragment extends Fragment implements PtrHandler {
     }
 
     @Override
-    public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
+    public void onRefreshBegin(PtrFrameLayout ptrFrameLayout)
+    {
         if (onRefreshListener != null) {
             onRefreshListener.onRefresh();
         }

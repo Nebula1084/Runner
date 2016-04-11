@@ -18,7 +18,8 @@
 
         <TextView
             style="@style/user_text_item"
-            android:text="昵称" />
+            android:text="昵称"
+            android:id="@+id/user_center_nickname"/>
 
         <ImageView
             android:id="@+id/user_edit"
@@ -35,7 +36,8 @@
 
         <TextView
             style="@style/user_text_item"
-            android:text="157****6900" />
+            android:text="157****6900"
+            android:id="@+id/user_center_phone"/>
     </LinearLayout>
 
     <LinearLayout

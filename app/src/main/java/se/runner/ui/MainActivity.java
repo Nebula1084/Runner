@@ -19,11 +19,20 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.karim.MaterialTabs;
 import se.runner.R;
+import se.runner.user.User;
 import se.runner.widget.CaptureActivityAnyOrientation;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+{
     final public static int MAIN_QR_SCAN = 0x000A;
+
+    private User user;
+
+    private TaskSquareFragment taskSquareFragment;
+    private MyDeliveryFragment myDeliveryFragment;
+    private MyTaskFragment myTaskFragment;
+    private UserCenterFragment userCenterFragment;
 
     @Bind(R.id.main_tabs)
     MaterialTabs main_tabs;
@@ -43,13 +52,36 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(tool_bar);
 
+        taskSquareFragment = new TaskSquareFragment();
+        myDeliveryFragment = new MyDeliveryFragment();
+        myTaskFragment = new MyTaskFragment();
+        userCenterFragment = new UserCenterFragment();
+
         runnerPagerAdapter = new RunnerPagerAdapter(MainActivity.this, getSupportFragmentManager());
-        runnerPagerAdapter.setItem(getString(R.string.task_square), new TaskSquareFragment(), new IconDrawable(this, FontAwesomeIcons.fa_search));
-        runnerPagerAdapter.setItem(getString(R.string.mydelivery), new MyDeliveryFragment(), new IconDrawable(this, FontAwesomeIcons.fa_shopping_bag));
-        runnerPagerAdapter.setItem(getString(R.string.mytask), new MyTaskFragment(), new IconDrawable(this, FontAwesomeIcons.fa_tasks));
-        runnerPagerAdapter.setItem(getString(R.string.user_center), new UserCenterFragment(), new IconDrawable(this, FontAwesomeIcons.fa_user));
+
+//        runnerPagerAdapter.setItem(getString(R.string.task_square), new TaskSquareFragment(), new IconDrawable(this, FontAwesomeIcons.fa_search));
+//        runnerPagerAdapter.setItem(getString(R.string.mydelivery), new MyDeliveryFragment(), new IconDrawable(this, FontAwesomeIcons.fa_shopping_bag));
+//        runnerPagerAdapter.setItem(getString(R.string.mytask), new MyTaskFragment(), new IconDrawable(this, FontAwesomeIcons.fa_tasks));
+//        runnerPagerAdapter.setItem(getString(R.string.user_center), new UserCenterFragment(), new IconDrawable(this, FontAwesomeIcons.fa_user));
+        runnerPagerAdapter.setItem(getString(R.string.task_square), taskSquareFragment, new IconDrawable(this, FontAwesomeIcons.fa_search));
+        runnerPagerAdapter.setItem(getString(R.string.mydelivery), myDeliveryFragment, new IconDrawable(this, FontAwesomeIcons.fa_shopping_bag));
+        runnerPagerAdapter.setItem(getString(R.string.mytask), myTaskFragment, new IconDrawable(this, FontAwesomeIcons.fa_tasks));
+        runnerPagerAdapter.setItem(getString(R.string.user_center), userCenterFragment, new IconDrawable(this, FontAwesomeIcons.fa_user));
+
         main_view_pager.setAdapter(runnerPagerAdapter);
         main_tabs.setViewPager(main_view_pager);
+
+        Intent intent = getIntent();
+        user = new User(this, intent.getExtras().getString("account") , intent.getExtras().getString("passwd") );
+        user.login();
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(User.class.getName(),user);
+
+        userCenterFragment.setArguments(bundle);
+        myTaskFragment.setArguments(bundle);
+        myDeliveryFragment.setArguments(bundle);
+        taskSquareFragment.setArguments(bundle);
 
     }
 
@@ -79,7 +111,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK)
             return;

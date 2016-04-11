@@ -8,18 +8,26 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
 import se.runner.R;
+import se.runner.user.User;
 
 public class UserCenterFragment extends Fragment implements View.OnClickListener {
     private ImageView user_icon, user_contacts_arrow, user_address_arrow, user_logout_arrow, user_edit, user_phone_call;
     private LinearLayout user_address, user_contacts, user_logout;
 
+    private TextView nickname;
+    private TextView phone;
+
+    private User user;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
         View view = inflater.inflate(R.layout.fragment_user_center, container, false);
         user_icon = (ImageView) view.findViewById(R.id.user_icon);
         user_icon.setImageDrawable(new IconDrawable(getContext(), FontAwesomeIcons.fa_user));
@@ -40,6 +48,16 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         user_contacts.setOnClickListener(this);
         user_logout = (LinearLayout) view.findViewById(R.id.user_logout);
         user_logout.setOnClickListener(this);
+
+        nickname = (TextView) view.findViewById(R.id.user_center_nickname);
+        phone = (TextView) view.findViewById(R.id.user_center_phone);
+
+        Bundle bundle = getArguments();
+        user = (User) bundle.getSerializable(User.class.getName());
+
+        nickname.setText(user.getNickname());
+        phone.setText(user.getAccount());
+
         return view;
     }
 

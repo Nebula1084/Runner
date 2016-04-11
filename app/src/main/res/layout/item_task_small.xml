@@ -32,7 +32,8 @@
 
                     <TextView
                         style="@style/task_text_item"
-                        android:text="玉泉快递" />
+                        android:text="玉泉快递"
+                        android:id="@+id/task_small_source_address"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -47,7 +48,8 @@
 
                     <TextView
                         style="@style/task_text_item"
-                        android:text="玉泉快递" />
+                        android:text="玉泉快递"
+                        android:id="@+id/task_small_target_address"/>
                 </LinearLayout>
             </LinearLayout>
 
@@ -80,7 +82,8 @@
 
                 <TextView
                     style="@style/task_text_item"
-                    android:text="玉泉快递" />
+                    android:text="玉泉快递"
+                    android:id="@+id/task_small_type"/>
             </LinearLayout>
 
             <LinearLayout
@@ -94,7 +97,8 @@
 
                 <TextView
                     style="@style/task_text_item"
-                    android:text="玉泉快递" />
+                    android:text="玉泉快递"
+                    android:id="@+id/task_small_pay"/>
             </LinearLayout>
 
         </LinearLayout>

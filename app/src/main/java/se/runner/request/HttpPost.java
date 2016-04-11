@@ -15,6 +15,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Reader;
+import java.io.Serializable;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -24,8 +25,9 @@ import java.util.Scanner;
 
 import se.runner.ui.MainActivity;
 
-public class HttpPost extends AsyncTask<String, Integer, String> {
-    private StringBuilder strUrl;
+public class HttpPost extends AsyncTask<String, Integer, String>
+{
+    private transient StringBuilder strUrl;
     private HttpCallback httpCallback;
     private ContentValues parameters;
     private String TAG="HttpPost";
@@ -116,7 +118,8 @@ public class HttpPost extends AsyncTask<String, Integer, String> {
     }
 
     @Override
-    protected void onPostExecute(String get) {
+    protected void onPostExecute(String get)
+    {
         if (httpCallback != null)
             httpCallback.onPost(get);
     }

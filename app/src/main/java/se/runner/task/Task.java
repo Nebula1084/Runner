@@ -7,21 +7,21 @@ import android.content.DialogInterface;
 import android.util.Log;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import se.runner.request.HttpCallback;
 import se.runner.request.HttpPost;
 import se.runner.user.User;
 
 public class Task implements Serializable {
-    enum TaskStatus {
+    public enum TaskStatus {
         INIT,   // when created, it is in INIT status. laucher can discard task in this state.
-        RELEASED,  // when laucher release it to internet(so other can see it), it's in RELEASED.  laucher can discard task in this state.
-        PROGRESS,  // when taker(or runner) takes the task, it's in progress.or task resumed from paused.  laucher/runner can discard task in this state only when other agree.
+        PUBLISHED,  // when laucher release it to internet(so other can see it), it's in PUBLISHED.  laucher can discard task in this state.
+        ACCEPTED,  // when someone accept this task
+        PROGRESS,  // when taker(or runner) takes cargo/goods, it's in progress.or task resumed from paused.  laucher/runner can discard task in this state only when other agree.
         ABORT,   // launcher/runner discard task and other agreed.
         PAUSED,  // task is paused, so delay time can be infty, but the task can resume later.
-        COMPLETED,  // when task is done in a normal way
+        DELIVERED, // when cargo is delivered
+        COMPLETED,  // when task is done,and money transfer is OK. a normal way
         RATED,   // after the task is rated
     }
 
@@ -35,7 +35,8 @@ public class Task implements Serializable {
 
     // use System.currentTimeMillis() may not be safe, but simple
     private long create_timestamp;
-    private long release_timestamp;
+    private long publish_timestamp;
+    private long accept_timestamp;
     private long delivery_timestamp;
     private long deadline_timestamp;
     private long finish_timestamp;  // finish includes abort or completed
@@ -63,6 +64,51 @@ public class Task implements Serializable {
         taskLauncher = "taskLauncher";
         taskShipper = "taskShipper";
         taskShipper = "taskShipper";
+    }
+
+    public Task(final int tid,
+                final String taskLauncherAccount,
+                final String taskShipperAccount,
+                final String taskConsigneeAccount,
+                final String taskCategory,
+                final long timestamp,
+                final float pay,
+                final int emergencyLevel,
+                final long delivery_time,
+                final long receiving_time,
+                final String delivery_address,
+                final String receiving_address,
+                final int statusCode,
+                final int rateCode,
+                final long gain_time,
+                final long arrive_time,
+                final String commentStr) {
+
+        id = tid;
+        taskLauncher = taskLauncherAccount;
+        taskShipper = taskShipperAccount;
+        taskConsignee = taskConsigneeAccount;
+        category = taskCategory;
+        create_timestamp = timestamp;
+        payment = pay;
+        accept_timestamp = delivery_time;
+        finish_timestamp = receiving_time;
+        deliveryAddress = delivery_address;
+        receivingAddress = receiving_address;
+        emergency = emergencyLevel;
+        rate = rateCode;
+        finish_timestamp = gain_time;
+        delivery_timestamp = arrive_time;
+        comment = commentStr;
+
+        switch (statusCode)
+        {
+            case 0: status = TaskStatus.PUBLISHED;break;
+            case 1: status = TaskStatus.ACCEPTED;break;
+            case 2: status = TaskStatus.PROGRESS;break;
+            case 3: status = TaskStatus.DELIVERED;break;
+            case 4: status = TaskStatus.COMPLETED;break;
+        }
     }
 
     // no account validation check, may not safe
@@ -148,14 +194,14 @@ public class Task implements Serializable {
         new HttpPost("/publish", para, httpCallback).execute();
     }
 
-    public void findTaskByLauncher(String account, HttpCallback httpCallback) {
+    public static void findTaskByLauncher(String account, HttpCallback httpCallback) {
         ContentValues para = new ContentValues();
         para.put("account", account);
 
         new HttpPost("/publisherTask", para, httpCallback).execute();
     }
 
-    public void findTaskByRunner(String account, HttpCallback httpCallback) {
+    public static void findTaskByRunner(String account, HttpCallback httpCallback) {
         ContentValues para = new ContentValues();
         para.put("account", account);
         new HttpPost("/runnerTask", para, httpCallback).execute();
@@ -167,7 +213,7 @@ public class Task implements Serializable {
         new HttpPost("/gettask", para, httpCallback).execute();
     }
 
-    public void findAvailableTask(HttpCallback httpCallback) {
+    public static void findAvailableTask(HttpCallback httpCallback) {
         ContentValues para = new ContentValues();
 
         // TODO: 4/4/16 not sure empty para will make the http post work
@@ -265,7 +311,7 @@ public class Task implements Serializable {
     }
 
     public void releaseTask() {
-        setStatus(TaskStatus.RELEASED);
+        setStatus(TaskStatus.PUBLISHED);
         // TODO: 4/1/16 release task
     }
 
@@ -428,6 +474,21 @@ public class Task implements Serializable {
         return comment;
     }
 
+    public String getCategory()
+    {
+        return category;
+    }
+
+    public float getPayment()
+    {
+        return payment;
+    }
+
+    public TaskStatus getStatus()
+    {
+        return status;
+    }
+
     public String getDeliveryAddress() {
         return deliveryAddress;
     }
@@ -446,5 +507,30 @@ public class Task implements Serializable {
 
     public String getTaskConsignee() {
         return taskConsignee;
+    }
+
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("tid="+id+";");
+        builder.append("publisher="+taskLauncher+";");
+        builder.append("shipper="+taskShipper+";");
+        builder.append("consignee="+taskConsignee+";");
+        builder.append("category="+category+";");
+        builder.append("timestamp="+create_timestamp+";");
+        builder.append("pay="+payment+";");
+        builder.append("emergency="+emergency+";");
+        builder.append("delivery_time="+delivery_timestamp+";");
+        builder.append("recieving_time="+finish_timestamp+";");
+        builder.append("delivery_address="+deliveryAddress+";");
+        builder.append("recieving_address="+receivingAddress+";");
+        builder.append("status="+status+";");
+        builder.append("rate="+rate+";");
+        builder.append("gain_time="+accept_timestamp+";");
+        builder.append("arrive_time="+finish_timestamp+";");
+        builder.append("comment="+comment+";");
+
+        return builder.toString();
     }
 }

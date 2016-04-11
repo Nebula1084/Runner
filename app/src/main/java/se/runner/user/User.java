@@ -9,12 +9,15 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import se.runner.request.HttpCallback;
 import se.runner.request.HttpPost;
 
-public class User
+public class User implements Serializable
 {
     final private String TAG = "USER";
+    final private static boolean DEBUG = true;
 
     private String account;
     private String passwd;
@@ -548,13 +551,21 @@ public class User
         }).execute();
     }
 
-    public boolean login()
+    public boolean login(HttpCallback httpCallback)
     {
         ContentValues para = new ContentValues();
 
         para.put("account",account);
         para.put("passwd",passwd);
-        new HttpPost("/login", para, new HttpCallback()
+
+        new HttpPost("/login",para,httpCallback).execute();
+
+        return true;
+    }
+
+    public boolean login()
+    {
+        HttpCallback httpCallback = new HttpCallback()
         {
             @Override
             public void onPost(String get)
@@ -615,27 +626,33 @@ public class User
                     //parseServerResponse(get);
                     getInfo();
 
-                    new AlertDialog.Builder(context)
-                            .setTitle("登录成功")
-                            .setMessage("快去使用吧~")
-                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // continue
-                                }
-                            })
-                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    if(DEBUG)
+                    {
+                        new AlertDialog.Builder(context)
+                                .setTitle("DEBUG::登录成功")
+                                .setMessage("快去使用吧~")
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+
                 }
             }
-        }).execute();
+        };
 
-        return login == 1;
+        return login(httpCallback);
     }
+
+
 
     public boolean logout()
     {
@@ -686,6 +703,20 @@ public class User
         return login == 0;
     }
 
+    public boolean register(HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+
+        para.put("account",account);
+        para.put("passwd", passwd);
+        para.put("nickname",nickname);
+        para.put("address",address);
+
+        new HttpPost("/register",para, httpCallback).execute();
+
+        return true;
+    }
+
     public boolean register()
     {
         if( isLogin() )
@@ -696,11 +727,7 @@ public class User
 
         Log.e(TAG, "Registering a new accout");
 
-        ContentValues para = new ContentValues();
-
-        para.put("account",account);
-        para.put("passwd", passwd);
-        new HttpPost("/register", para, new HttpCallback()
+        HttpCallback httpCallback = new HttpCallback()
         {
             @Override
             public void onPost(String get)
@@ -774,12 +801,21 @@ public class User
                 }
 
             }
-        }).execute();
+        };
 
 
-        return register;
+        return register(httpCallback);
     }
 
+    public void getInfo(HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("account",account);
+
+
+        new HttpPost("/info",para,httpCallback).execute();
+
+    }
     public void getInfo()
     {
         if( !isLogin() )
@@ -799,21 +835,25 @@ public class User
                     // update info from server
                     parseServerResponse(get);
 
-                    new AlertDialog.Builder(context)
-                            .setTitle("Debug")
-                            .setMessage(get)
-                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // continue
-                                }
-                            })
-                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    if(DEBUG)
+                    {
+                        new AlertDialog.Builder(context)
+                                .setTitle("Debug")
+                                .setMessage(get)
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+
                 }
             }
         }).execute();
@@ -858,9 +898,11 @@ public class User
             icon = (String) jsonObject.get("icon");
             balance = (double) jsonObject.get("balance");
             address = (String) jsonObject.get("address");
-            averagerate = (double) jsonObject.get("averagerate");
+            averagerate = (double) jsonObject.get("avgrate");
             latitude = (double) jsonObject.get("latitude");
             longtitude = (double) jsonObject.get("longtitude");
+            launchTaskNum = (int) jsonObject.get("launchTaskNum");
+            takeTaskNum = (int ) jsonObject.get("takeTaskNum");
 //            timestamp = (int) jsonObject.get("timestamp");
 //            Log.e(TAG,"register result:address="+getAddress());
         }

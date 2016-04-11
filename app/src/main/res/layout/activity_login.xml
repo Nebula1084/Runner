@@ -23,11 +23,13 @@
         android:layout_marginTop="100dp" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/login_account_text"
         style="@style/login_text"
         android:hint="@string/login_user_name"
         app:met_baseColor="@color/md_black_1000" />
 
     <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/login_passwd_text"
         style="@style/login_text"
         android:hint="@string/login_passwd"
         app:met_baseColor="@color/md_black_1000" />
