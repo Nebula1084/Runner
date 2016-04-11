@@ -1,6 +1,7 @@
 package se.runner.ui;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Toast;
@@ -36,6 +37,8 @@ public class TaskSquareFragment extends TaskListFragment implements TaskListFrag
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(getContext(), TaskAcceptActivity.class));
+        Intent intent = new Intent(getContext(), TaskAcceptActivity.class);
+        intent.putExtra(Task.class.getName(), (Task) parent.getAdapter().getItem(position));
+        startActivity(intent);
     }
 }

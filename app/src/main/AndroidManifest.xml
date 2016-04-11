@@ -67,6 +67,10 @@
             android:label="@string/my_delivery"/>
         <activity android:name=".ui.MyTaskActivity"
             android:label="@string/my_task"/>
+        <activity android:name=".ui.QRCodeActivity"
+            android:label="@string/scan_qrcode"/>
+        <activity android:name=".ui.CommentActivity"
+            android:label="@string/task_comment"/>
         <activity android:name=".widget.CaptureActivityAnyOrientation">
         </activity>
 

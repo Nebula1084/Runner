@@ -54,4 +54,5 @@
     <string name="task_accept">任务接受</string>
     <string name="my_delivery">我的配送</string>
     <string name="my_task">我的任务</string>
+    <string name="task_comment">任务评价</string>
 </resources>

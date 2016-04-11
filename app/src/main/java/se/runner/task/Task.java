@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import se.runner.request.HttpCallback;
 import se.runner.request.HttpPost;
 import se.runner.user.User;
 
-public class Task {
+public class Task implements Serializable {
     enum TaskStatus {
         INIT,   // when created, it is in INIT status. laucher can discard task in this state.
         RELEASED,  // when laucher release it to internet(so other can see it), it's in RELEASED.  laucher can discard task in this state.
@@ -59,6 +60,9 @@ public class Task {
         status = TaskStatus.PROGRESS;
         deliveryAddress = "deliveryAddress";
         receivingAddress = "receivingAddress";
+        taskLauncher = "taskLauncher";
+        taskShipper = "taskShipper";
+        taskShipper = "taskShipper";
     }
 
     // no account validation check, may not safe
@@ -424,4 +428,23 @@ public class Task {
         return comment;
     }
 
+    public String getDeliveryAddress() {
+        return deliveryAddress;
+    }
+
+    public String getReceivingAddress() {
+        return receivingAddress;
+    }
+
+    public String getTaskLauncher() {
+        return taskLauncher;
+    }
+
+    public String getTaskShipper() {
+        return taskShipper;
+    }
+
+    public String getTaskConsignee() {
+        return taskConsignee;
+    }
 }

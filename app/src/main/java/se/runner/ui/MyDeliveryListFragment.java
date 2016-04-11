@@ -36,6 +36,8 @@ public class MyDeliveryListFragment extends TaskListFragment implements TaskList
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(getContext(), MyDeliveryActivity.class));
+        Intent intent = new Intent(getContext(), MyDeliveryActivity.class);
+        intent.putExtra(Task.class.getName(), (Task) parent.getAdapter().getItem(position));
+        startActivity(intent);
     }
 }
