@@ -572,4 +572,32 @@ public class Task implements Serializable {
 
         return builder.toString();
     }
+
+    public String toJsonString()
+    {
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("{");
+        builder.append("\"tid\":"+getId()+",");
+        builder.append("\"publisher\":"+getTaskLauncher()+",");
+        builder.append("\"shipper\":"+getTaskShipper()+",");
+        builder.append("\"consignee\":"+getTaskConsignee()+",");
+        builder.append("\"category\":"+getCategory()+",");
+        builder.append("\"timestamp\":"+getCreate_timestamp()+",");
+        builder.append("\"pay\":"+getPayment()+",");
+        builder.append("\"emergency\":"+getEmergency()+",");
+        builder.append("\"delivery_time\":"+getRequired_delivery_time()+",");
+        builder.append("\"recieving_time\":"+getRequired_gain_time()+",");
+        builder.append("\"delivery_address\":"+getDeliveryAddress()+",");
+        builder.append("\"recieving_address\":"+getReceivingAddress()+",");
+        builder.append("\"status\":"+getStatus()+",");
+        builder.append("\"rate\":"+getRate()+",");
+        builder.append("\"gain_time\":"+getActual_gain_time()+",");
+        builder.append("\"arrive_time\":"+getActual_delivery_time()+",");
+        builder.append("\"comment\":"+getComment());
+        builder.append("}");
+
+        return builder.toString();
+    }
 }

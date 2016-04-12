@@ -44,7 +44,7 @@ public class QRCodeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if( intent != null )
         {
-            qrContent = intent.getExtras().getString("tid");
+            qrContent = intent.getExtras().getString("task");
             Log.e(TAG,"get qr input="+ qrContent);
         }
         else

@@ -107,7 +107,7 @@ public class MyDeliveryActivity extends AppCompatActivity {
     void qrCode()
     {
         Intent intent = new Intent(MyDeliveryActivity.this, QRCodeActivity.class);
-        intent.putExtra("tid",task.getId()+"");
+        intent.putExtra("task",task.toJsonString() );
         startActivity(intent);
     }
 }
