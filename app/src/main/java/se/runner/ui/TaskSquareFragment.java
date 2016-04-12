@@ -98,7 +98,7 @@ public class TaskSquareFragment extends TaskListFragment implements TaskListFrag
                     String delivery_address = jsonObject.getString("delivery_address");
                     String recieving_address = jsonObject.getString("recieving_address");
                     int status = (int) jsonObject.get("status");
-                    int rate = (int) jsonObject.get("rate");
+                    Double rate =  jsonObject.getDouble("rate");
                     Long gain_time =  jsonObject.getLong("gain_time");
                     Long arrive_time = jsonObject.getLong("arrive_time");
                     String comment = jsonObject.getString("comment");

@@ -91,35 +91,35 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         if( isAdd_publish_status == false && task_status >= 1)
         {
             TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已发布\n"+ milles_to_chinese_format(task.getCreate_timestamp() ));
+            textview.setText("已发布,等待被抢单\n"+ milles_to_chinese_format(task.getCreate_timestamp() ));
             isAdd_publish_status = true;
         }
 
         if( isAdd_accept_status == false && task_status >= 2)
         {
             TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已被领取\n"+ milles_to_chinese_format( task.getActual_gain_time() ));
+            textview.setText("已被抢单，等待接货开始任务\n"+ milles_to_chinese_format( task.getActual_gain_time() ));
             isAdd_accept_status = true;
         }
 
         if( isAdd_progress_status == false && task_status >= 3)
         {
             TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("进行中\n"+ "执行者:"+task.getTaskShipper() );
+            textview.setText("任务进行中\n"+ "执行者:"+task.getTaskShipper() );
             isAdd_progress_status = true;
         }
 
         if( isAdd_delivered_status == false && task_status >= 4)
         {
             TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已送达\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
+            textview.setText("货物已送达\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
             isAdd_delivered_status = true;
         }
 
-        if( isAdd_completed_status == false || task_status >= 5)
+        if( isAdd_completed_status == false && task_status >= 5)
         {
             TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已完成，待评价\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
+            textview.setText("已付款，等待评价\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
 
             isAdd_completed_status = true;
 

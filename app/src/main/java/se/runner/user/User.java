@@ -36,7 +36,7 @@ public class User implements Serializable
     private double longtitude;
     private int launchTaskNum;
     private int takeTaskNum;
-    private List<String> contactList;
+    private transient List<String> contactList;
     transient Context context;
 
     public User(String account, String passwd)
@@ -180,6 +180,11 @@ public class User implements Serializable
 
     public String getIcon() {
         return icon;
+    }
+
+    public List<String> getContactList()
+    {
+        return contactList;
     }
 
     public int getLaunchTaskNum()

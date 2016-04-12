@@ -125,14 +125,14 @@ public class TaskListAdapter extends BaseAdapter {
                     Task.TaskStatus code = tasks.get(position).getStatus();
                     switch (code)
                     {
-                        case PUBLISHED:status="已发布，待接受";break;
-                        case ACCEPTED:status="被接受";break;
-                        case PROGRESS:status="进行中";break;
-                        case ABORT:status="已放弃";break;
+                        case PUBLISHED:status="已发布，等待被抢单";break;
+                        case ACCEPTED:status="已被抢单，等待拿货开始任务";break;
+                        case PROGRESS:status="任务进行中";break;
+                        case ABORT:status="任务已被放弃";break;
                         case PAUSED:status="已暂停";break;
-                        case DELIVERED:status="已送达";break;
-                        case COMPLETED:status="待评价";break;
-                        case RATED:status="已结束";break;
+                        case DELIVERED:status="货物已送达";break;
+                        case COMPLETED:status="已付款，等待评价";break;
+                        case RATED:status="评价完成，任务结束";break;
                         default:status="状态不明";break;
                     }
                     holder.task_small_status.setText(status);
