@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this,jsonString , Toast.LENGTH_LONG).show();
                 handleQRResult(jsonString);
                 break;
-            case UserCenterFragment.CONTACT_LIST:
+            case 65536 + UserCenterFragment.CONTACT_LIST:
                 Log.e(TAG,"ContactActivity returned");
                 String [] tmpList = data.getStringArrayExtra(ContactActivity.LIST_DATA);
                 if( tmpList != null && tmpList[0].equals("<Empty-List>") == false )

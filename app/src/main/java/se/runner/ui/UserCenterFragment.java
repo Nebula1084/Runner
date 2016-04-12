@@ -28,7 +28,7 @@ import se.runner.user.User;
 public class UserCenterFragment extends Fragment implements View.OnClickListener {
     private final String TAG= "UerCenter";
 
-    final public static int CONTACT_LIST = 0x000B;
+    final public static int CONTACT_LIST = 1 ;
 
     private ImageView user_icon, user_contacts_arrow, user_address_arrow, user_logout_arrow, user_edit, user_phone_call;
     private LinearLayout user_address, user_contacts, user_logout;
@@ -115,8 +115,9 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 String [] strings = new String[ user.getContactList().size() ];
                 strings = user.getContactList().toArray(strings);
                 intent.putExtra("contactList", strings );
-
+                Log.e(TAG,"into contact activity, request code = "+ CONTACT_LIST);
                 startActivityForResult( intent, CONTACT_LIST );
+
                 break;
             case R.id.user_logout:
                 logout();
