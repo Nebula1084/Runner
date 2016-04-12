@@ -5,6 +5,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -19,6 +20,8 @@ import se.runner.R;
 import se.runner.task.Task;
 
 public class MyDeliveryActivity extends AppCompatActivity {
+    final private String TAG = "DeliveryActivity";
+
     @Bind(R.id.tool_bar)
     Toolbar toolbar;
 
@@ -37,8 +40,11 @@ public class MyDeliveryActivity extends AppCompatActivity {
     @Bind(R.id.mydelivery_delivery_check)
     CheckBox mydelivery_delivery_check;
 
+    private Task task;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mydelivery);
         ButterKnife.bind(this);
@@ -48,11 +54,22 @@ public class MyDeliveryActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         Intent intent = getIntent();
-        Task task = (Task) intent.getSerializableExtra(Task.class.getName());
+        if( intent != null)
+        {
+            task = (Task) intent.getSerializableExtra(Task.class.getName());
+        }
+        else
+        {
+            task = new Task();
+            Log.e(TAG," intent is null ");
+        }
 
         mydelivery_location_pick_picker.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_map_marker).sizeDp(32));
         mydelivery_location_delivery_picker.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_map_marker).sizeDp(32));
         mydelivery_task_id.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_qrcode).sizeDp(32));
+
+
+
     }
 
     @Override
@@ -66,7 +83,10 @@ public class MyDeliveryActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.mydelivery_task_id)
-    void qrCode() {
-        startActivity(new Intent(MyDeliveryActivity.this, QRCodeActivity.class));
+    void qrCode()
+    {
+        Intent intent = new Intent(MyDeliveryActivity.this, QRCodeActivity.class);
+        intent.putExtra("tid",task.getId()+"");
+        startActivity(intent);
     }
 }
