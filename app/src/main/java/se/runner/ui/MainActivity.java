@@ -26,6 +26,7 @@ import se.runner.widget.CaptureActivityAnyOrientation;
 public class MainActivity extends AppCompatActivity
 {
     final public static int MAIN_QR_SCAN = 0x000A;
+    final private String TAG="Main";
 
     private User user;
 
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity
 //        runnerPagerAdapter.setItem(getString(R.string.mydelivery), new MyDeliveryFragment(), new IconDrawable(this, FontAwesomeIcons.fa_shopping_bag));
 //        runnerPagerAdapter.setItem(getString(R.string.mytask), new MyTaskFragment(), new IconDrawable(this, FontAwesomeIcons.fa_tasks));
 //        runnerPagerAdapter.setItem(getString(R.string.user_center), new UserCenterFragment(), new IconDrawable(this, FontAwesomeIcons.fa_user));
-        runnerPagerAdapter.setItem(getString(R.string.task_square), taskSquareFragment, new IconDrawable(this, FontAwesomeIcons.fa_search));
+        runnerPagerAdapter.setItem("任务广场", taskSquareFragment, new IconDrawable(this, FontAwesomeIcons.fa_search));
         runnerPagerAdapter.setItem(getString(R.string.mydelivery), myDeliveryFragment, new IconDrawable(this, FontAwesomeIcons.fa_shopping_bag));
         runnerPagerAdapter.setItem(getString(R.string.mytask), myTaskFragment, new IconDrawable(this, FontAwesomeIcons.fa_tasks));
         runnerPagerAdapter.setItem(getString(R.string.user_center), userCenterFragment, new IconDrawable(this, FontAwesomeIcons.fa_user));
@@ -72,7 +73,15 @@ public class MainActivity extends AppCompatActivity
         main_tabs.setViewPager(main_view_pager);
 
         Intent intent = getIntent();
-        user = new User(this, intent.getExtras().getString("account") , intent.getExtras().getString("passwd") );
+        if( intent != null )
+        {
+            user = new User(this, intent.getExtras().getString("account") , intent.getExtras().getString("passwd") );
+        }
+        else
+        {
+            Log.e(TAG,"intent is null");
+            user =new User("null","null");
+        }
         user.login();
 
         Bundle bundle = new Bundle();

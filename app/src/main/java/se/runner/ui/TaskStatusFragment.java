@@ -116,14 +116,15 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
             isAdd_delivered_status = true;
         }
 
-        if( isAdd_completed_status == false && task_status >= 5)
+        if( isAdd_completed_status == false || task_status >= 5)
         {
             TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
             textview.setText("已完成，待评价\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
 
             isAdd_completed_status = true;
 
-            ButtonRectangle buttonRectangle = (ButtonRectangle) linearLayout.getChildAt(linearLayout.getChildCount() - 1);
+            LinearLayout linearLayout2 = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_task_finished, task_status_queue);
+            ButtonRectangle buttonRectangle = (ButtonRectangle) linearLayout2.getChildAt(linearLayout.getChildCount() - 1);
             buttonRectangle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,12 +138,9 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         if( isAdd_comment_status == false && task_status >= 6)
         {
             TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已评价。\n评分="+task.getRate()+"\n快去发布新任务吧");
+            textview.setText("已评价。\n评分="+task.getRate()+"\n"+task.getComment()+"\n快去发布新任务吧");
             isAdd_comment_status = true;
         }
-
-
-
 
     }
 
