@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -932,7 +933,20 @@ public class User implements Serializable
             longtitude = (double) jsonObject.get("longtitude");
             launchTaskNum = (int) jsonObject.get("launchTaskNum");
             takeTaskNum = (int ) jsonObject.get("takeTaskNum");
-            contactList = (List<String>) jsonObject.get("contacts");
+            JSONArray jsonArray = jsonObject.getJSONArray("contacts");
+            if( jsonArray != null )
+            {
+                List<String> tmpList = new ArrayList<>();
+                for(int i=0; i<jsonArray.length(); i++)
+                {
+                    String tmp = jsonArray.getString(i);
+                    if( tmp != null )
+                        tmpList.add(tmp);
+
+                }
+                if( tmpList.size() != 0 )
+                    contactList = new ArrayList<>(tmpList);
+            }
 
 //            timestamp = (int) jsonObject.get("timestamp");
 //            Log.e(TAG,"register result:address="+getAddress());

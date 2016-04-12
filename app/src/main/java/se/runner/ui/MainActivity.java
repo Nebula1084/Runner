@@ -151,7 +151,8 @@ public class MainActivity extends AppCompatActivity
 
     public void handleQRResult(String result ) // result is a json string
     {
-        if (result == null) {
+        if (result == null)
+        {
             new AlertDialog.Builder(context)
                     .setTitle("解析二维码失败")
                     .setMessage("您的摄像头近视了")
@@ -176,9 +177,10 @@ public class MainActivity extends AppCompatActivity
         }
 
         Task task = Task.parseTaskFromJsonString(result);
-        if (task == null) {
+        if (task == null)
+        {
             new AlertDialog.Builder(context)
-                    .setTitle("无效二维码")
+                    .setTitle("无效二维码，解析任务失败")
                     .setMessage("您扫的二维码不是本应用需要的二维码")
                     .setPositiveButton("我错了", new DialogInterface.OnClickListener()
                     {

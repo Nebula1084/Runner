@@ -57,6 +57,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
 
         nickname = (TextView) view.findViewById(R.id.user_center_nickname);
         phone = (TextView) view.findViewById(R.id.user_center_phone);
+
         deliveryNum = (TextView) view.findViewById(R.id.user_delivery_num);
         publishNum = (TextView) view.findViewById(R.id.user_publish_num);
 
@@ -71,10 +72,10 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
             user = new User("null","null");
         }
 
-        nickname.setText(user.getNickname());
+        nickname.setText( user.getNickname() );
         phone.setText(user.getAccount());
-        deliveryNum.setText( user.getTakeTaskNum() );
-        publishNum.setText( user.getLaunchTaskNum() );
+        deliveryNum.setText( user.getTakeTaskNum()+"" );
+        publishNum.setText( user.getLaunchTaskNum()+"" );
 
         return view;
     }

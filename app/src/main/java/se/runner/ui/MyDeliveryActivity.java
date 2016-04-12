@@ -108,6 +108,8 @@ public class MyDeliveryActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(MyDeliveryActivity.this, QRCodeActivity.class);
         intent.putExtra("task",task.toJsonString() );
+
+        Log.e(TAG,"check:json string="+task.toJsonString() );
         startActivity(intent);
     }
 }

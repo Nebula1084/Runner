@@ -14,9 +14,12 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+
+import java.util.EnumMap;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -70,7 +73,9 @@ public class QRCodeActivity extends AppCompatActivity {
         QRCodeWriter qrCodeWriter = new QRCodeWriter();
         try
         {
-            BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE,smallerDimension,smallerDimension);
+            EnumMap<EncodeHintType, Object> hint = new EnumMap<EncodeHintType, Object>(EncodeHintType.class);
+            hint.put(EncodeHintType.CHARACTER_SET, "UTF-8");  //to make it suppor chinese
+            BitMatrix bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE,smallerDimension,smallerDimension,hint);
             int matrixWidth = bitMatrix.getWidth();
             int matrixHeight = bitMatrix.getHeight();
             Bitmap bmp = Bitmap.createBitmap(matrixWidth,matrixHeight, Bitmap.Config.RGB_565);

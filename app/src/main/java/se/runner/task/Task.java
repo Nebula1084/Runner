@@ -50,8 +50,8 @@ public class Task implements Serializable {
     private long actual_gain_time;
     private long actual_delivery_time;
 
-    private String comment;
-    private String description;
+    private String comment = "null";
+    private String description = "null";
 
     private String taskLauncher;
     private String taskShipper;
@@ -83,7 +83,7 @@ public class Task implements Serializable {
 
             if( jsonObject != null )
             {
-                // can't cast to long and float
+
                 int tid = (int) jsonObject.get("tid");
                 String publisher = jsonObject.getString("publisher");
                 String shipper = jsonObject.getString("shipper");
@@ -92,17 +92,17 @@ public class Task implements Serializable {
                 Long timestamp = (Long) jsonObject.get("timestamp");
                 double pay = (double) jsonObject.get("pay");
                 int emergency = (int) jsonObject.get("emergency");
-                Integer delivery_time = (Integer) jsonObject.get("delivery_time");
-                Integer recieving_time = (Integer) jsonObject.get("recieving_time");
+                Long delivery_time =  jsonObject.getLong("delivery_time");
+                Long recieving_time = jsonObject.getLong("recieving_time");
                 String delivery_address = jsonObject.getString("delivery_address");
                 String recieving_address = jsonObject.getString("recieving_address");
                 int status = (int) jsonObject.get("status");
-                int rate = (int) jsonObject.get("rate");
-                Integer gain_time = (Integer) jsonObject.get("gain_time");
-                Integer arrive_time = (Integer) jsonObject.get("arrive_time");
+                Double rate = jsonObject.getDouble("rate");
+                Long gain_time = jsonObject.getLong("gain_time");
+                Long arrive_time = jsonObject.getLong("arrive_time");
                 String comment = jsonObject.getString("comment");
 
-                return new Task(tid,
+                Task t =  new Task(tid,
                         publisher,
                         shipper,
                         consignee,
@@ -119,6 +119,10 @@ public class Task implements Serializable {
                         gain_time,
                         arrive_time,
                         comment);
+
+                Log.e("JSON",t.toJsonString());
+
+                return t;
             }
         }
         catch( JSONException jex)
@@ -142,7 +146,7 @@ public class Task implements Serializable {
                 final String delivery_address,
                 final String receiving_address,
                 final int statusCode,
-                final int rateCode,
+                final double rateCode,
                 final long gain_time,
                 final long arrive_time,
                 final String commentStr) {
@@ -318,7 +322,7 @@ public class Task implements Serializable {
         new HttpPost("/finish", para, httpCallback).execute();
     }
 
-    public void rate(int id, int rate, String cmt, HttpCallback httpCallback) {
+    public void rate(int id, Double rate, String cmt, HttpCallback httpCallback) {
         ContentValues para = new ContentValues();
         para.put("tid", id + "");
         para.put("rate", rate + "");
@@ -536,7 +540,8 @@ public class Task implements Serializable {
         user.checkUser(callback);
     }
 
-    public boolean setRate(double rate) {
+    public boolean setRate(double rate)
+    {
         if (rate < 0 || rate > 5 || status != TaskStatus.COMPLETED)
             return false;
 
@@ -554,6 +559,8 @@ public class Task implements Serializable {
     }
 
     public String getComment() {
+        if( comment.equals("") )
+            return "null";
         return comment;
     }
 
@@ -570,6 +577,24 @@ public class Task implements Serializable {
     public TaskStatus getStatus()
     {
         return status;
+    }
+
+    public int getStatusInt()
+    {
+        int statusCode = 0;
+
+        switch (status)
+        {
+            case PUBLISHED:statusCode = 0;break;
+            case ACCEPTED:statusCode = 1;break;
+            case PROGRESS:statusCode = 2;break;
+            case DELIVERED:statusCode = 3; break;
+            case COMPLETED:statusCode = 4; break;
+            default: statusCode = 0;
+        }
+
+        return statusCode;
+
     }
 
     public String getDeliveryAddress() {
@@ -650,7 +675,7 @@ public class Task implements Serializable {
         builder.append("\"recieving_time\":"+getRequired_gain_time()+",");
         builder.append("\"delivery_address\":"+getDeliveryAddress()+",");
         builder.append("\"recieving_address\":"+getReceivingAddress()+",");
-        builder.append("\"status\":"+getStatus()+",");
+        builder.append("\"status\":"+getStatusInt()+",");
         builder.append("\"rate\":"+getRate()+",");
         builder.append("\"gain_time\":"+getActual_gain_time()+",");
         builder.append("\"arrive_time\":"+getActual_delivery_time()+",");

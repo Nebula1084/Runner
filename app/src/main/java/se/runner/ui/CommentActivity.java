@@ -129,7 +129,7 @@ public class CommentActivity extends AppCompatActivity {
         };
 
         String commetStr = comment_comment.getText().toString();
-        int rate = (int) comment_rating.getRating();
+        double rate =  comment_rating.getRating();
 
         task.rate(task.getId(),rate,commetStr,httpCallback);
     }
