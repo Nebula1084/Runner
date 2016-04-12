@@ -33,7 +33,21 @@ public class User implements Serializable
     private double longtitude;
     private int launchTaskNum;
     private int takeTaskNum;
-    Context context;
+    transient Context context;
+
+    public User(String account, String passwd)
+    {
+        this.account = account;
+        this.passwd = passwd;
+        this.nickname = "local_null";
+        this.icon = "local_default.jpg";
+        this.balance = 0;
+        this.address = "local_null";
+        this.login = 0;
+        launchTaskNum = 0;
+        takeTaskNum = 0;
+        register = false;
+    }
 
     public User(Context ctx, String account, String passwd)
     {

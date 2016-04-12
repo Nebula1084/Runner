@@ -168,24 +168,18 @@ public class TaskSquareFragment extends TaskListFragment implements TaskListFrag
         /*for test. add a task to the list view*/
         Toast.makeText(getContext(), "正在刷新...", Toast.LENGTH_LONG).show();
 
-        Log.e(TAG,"Before refresh---->task list has "+tasks.size() + " tasks");
-//        addTask(new Task());
-//        update();// and notify the adapter to update the listview
-        update();
-
         refreshTasks();
-
-        tasks.add(new Task());
-//        setTasks(tasks);
-//        addTask(new Task());
-
-        update();
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
         Intent intent = new Intent(getContext(), TaskAcceptActivity.class);
-        intent.putExtra(Task.class.getName(), (Task) parent.getAdapter().getItem(position));
+        int taskId = ((Task) parent.getAdapter().getItem(position)).getId();
+//        intent.putExtra(Task.class.getName() , taskId );
+        intent.putExtra(Task.class.getName() , (Task) parent.getAdapter().getItem(position) );
+        intent.putExtra("account",user.getAccount());
+
         startActivity(intent);
     }
 }

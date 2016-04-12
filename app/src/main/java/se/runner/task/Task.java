@@ -35,11 +35,17 @@ public class Task implements Serializable {
 
     // use System.currentTimeMillis() may not be safe, but simple
     private long create_timestamp;
-    private long publish_timestamp;
-    private long accept_timestamp;
-    private long delivery_timestamp;
-    private long deadline_timestamp;
-    private long finish_timestamp;  // finish includes abort or completed
+
+//    private long publish_timestamp;
+//    private long accept_timestamp;
+//    private long delivery_timestamp;
+//    private long deadline_timestamp;
+//    private long finish_timestamp;  // finish includes abort or completed
+
+    private long required_gain_time; // time require to fetch the cargo
+    private long required_delivery_time;  // time require to finshi delivery
+    private long actual_gain_time;
+    private long actual_delivery_time;
 
     private String comment;
     private String description;
@@ -51,7 +57,7 @@ public class Task implements Serializable {
     private String deliveryAddress;
     private String receivingAddress;
 
-    private Context context;
+    private transient Context context;
 
     public Task() {
         category = "category";
@@ -91,14 +97,17 @@ public class Task implements Serializable {
         category = taskCategory;
         create_timestamp = timestamp;
         payment = pay;
-        accept_timestamp = delivery_time;
-        finish_timestamp = receiving_time;
         deliveryAddress = delivery_address;
         receivingAddress = receiving_address;
         emergency = emergencyLevel;
         rate = rateCode;
-        finish_timestamp = gain_time;
-        delivery_timestamp = arrive_time;
+
+        required_gain_time = receiving_time;
+        required_delivery_time = delivery_time;
+
+        actual_gain_time = gain_time;
+        actual_delivery_time = arrive_time;
+
         comment = commentStr;
 
         switch (statusCode)
@@ -129,8 +138,9 @@ public class Task implements Serializable {
         category = taskCategory;
         taskConsignee = taskConsigneeAccount;
         payment = pay;
-        delivery_timestamp = delivery_time;
-        finish_timestamp = receiving_time;
+
+        required_delivery_time = delivery_time;
+        required_gain_time = receiving_time;
         deliveryAddress = delivery_address;
         receivingAddress = receiving_address;
         emergency = emergencyLevel;
@@ -170,8 +180,8 @@ public class Task implements Serializable {
         para.put("consignee", taskConsignee);
         para.put("category", category);
         para.put("pay", payment + "");
-        para.put("delivery_time", delivery_timestamp + "");
-        para.put("receiving_time", finish_timestamp + "");
+        para.put("delivery_time", required_delivery_time + "");
+        para.put("receiving_time", required_gain_time + "");
         para.put("delivery_address", deliveryAddress);
         para.put("receiving_address", receivingAddress);
         para.put("emergency", emergency + "");
@@ -185,8 +195,8 @@ public class Task implements Serializable {
         para.put("consignee", taskConsignee);
         para.put("category", category);
         para.put("pay", payment + "");
-        para.put("delivery_time", delivery_timestamp + "");
-        para.put("receiving_time", finish_timestamp + "");
+        para.put("delivery_time", required_delivery_time + "");
+        para.put("receiving_time", required_gain_time + "");
         para.put("delivery_address", deliveryAddress);
         para.put("receiving_address", receivingAddress);
         para.put("emergency", emergency + "");
@@ -220,7 +230,7 @@ public class Task implements Serializable {
         new HttpPost("/availabletask", para, httpCallback).execute();
     }
 
-    public void accept(String account, int id, HttpCallback httpCallback) {
+    public static void accept(String account, int id, HttpCallback httpCallback) {
         ContentValues para = new ContentValues();
         para.put("tid", id + "");
         para.put("account", account);
@@ -323,7 +333,6 @@ public class Task implements Serializable {
     public void pauseTask() {
         setStatus(TaskStatus.PAUSED);
         //// TODO: 4/1/16  pause task
-        deadline_timestamp = -1;
     }
 
     public void abortTask() {
@@ -341,7 +350,7 @@ public class Task implements Serializable {
     }
 
     public void setDeadline(long t) {
-        deadline_timestamp = t;
+        required_delivery_time = t;
     }
 
     public void setDescription(String description) {
@@ -509,6 +518,21 @@ public class Task implements Serializable {
         return taskConsignee;
     }
 
+    public long getRequired_gain_time()
+    {
+        return required_gain_time;
+    }
+
+    public long getRequired_delivery_time()
+    {
+        return required_delivery_time;
+    }
+
+    public int getEmergency()
+    {
+        return emergency;
+    }
+
     public String toString()
     {
         StringBuilder builder = new StringBuilder();
@@ -521,14 +545,14 @@ public class Task implements Serializable {
         builder.append("timestamp="+create_timestamp+";");
         builder.append("pay="+payment+";");
         builder.append("emergency="+emergency+";");
-        builder.append("delivery_time="+delivery_timestamp+";");
-        builder.append("recieving_time="+finish_timestamp+";");
+        builder.append("delivery_time="+required_delivery_time+";");
+        builder.append("recieving_time="+required_gain_time+";");
         builder.append("delivery_address="+deliveryAddress+";");
         builder.append("recieving_address="+receivingAddress+";");
         builder.append("status="+status+";");
         builder.append("rate="+rate+";");
-        builder.append("gain_time="+accept_timestamp+";");
-        builder.append("arrive_time="+finish_timestamp+";");
+        builder.append("gain_time="+actual_gain_time+";");
+        builder.append("arrive_time="+actual_delivery_time+";");
         builder.append("comment="+comment+";");
 
         return builder.toString();

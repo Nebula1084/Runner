@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity
         Bundle bundle = new Bundle();
         bundle.putSerializable(User.class.getName(),user);
 
+//        bundle.putString("account",user.getAccount());
+//        bundle.putString("account",user.getPasswd());
+
         userCenterFragment.setArguments(bundle);
         myTaskFragment.setArguments(bundle);
         myDeliveryFragment.setArguments(bundle);
@@ -102,7 +105,9 @@ public class MainActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_publish:
-                startActivity(new Intent(MainActivity.this, TaskPublishActivity.class));
+                Intent intent = new Intent(MainActivity.this, TaskPublishActivity.class);
+                intent.putExtra("account",user.getAccount());
+                startActivity(intent);
                 break;
             case R.id.action_scan:
                 startActivityForResult(new Intent(MainActivity.this, ScanActivity.class), MAIN_QR_SCAN);

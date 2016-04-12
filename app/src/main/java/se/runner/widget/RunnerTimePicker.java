@@ -100,4 +100,9 @@ public class RunnerTimePicker extends AlertDialog implements DialogInterface.OnC
     public Date getDate(){
         return mCalendar.getTime();
     }
+
+    public Calendar getCalendar()
+    {
+        return mCalendar;
+    }
 }

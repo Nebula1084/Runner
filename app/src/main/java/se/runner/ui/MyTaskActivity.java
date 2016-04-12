@@ -27,7 +27,8 @@ public class MyTaskActivity extends AppCompatActivity {
     Task task;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mytask);
         ButterKnife.bind(this);
@@ -51,6 +52,7 @@ public class MyTaskActivity extends AppCompatActivity {
         runnerPagerAdapter.setItem("任务详情", taskDetailFragment, null);
         mytask_view_pager.setAdapter(runnerPagerAdapter);
         mytask_tabs.setViewPager(mytask_view_pager);
+
     }
 
     @Override

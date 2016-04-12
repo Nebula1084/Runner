@@ -75,7 +75,10 @@ public class HttpPost extends AsyncTask<String, Integer, String>
                     postData.append('&');
                 postData.append(URLEncoder.encode(key,"UTF-8"));
                 postData.append('=');
-                postData.append(URLEncoder.encode((String) parameters.get(key),"UTF-8") );
+                String value = (String) parameters.get(key);
+                if( value == null)
+                    value = "";
+                postData.append( URLEncoder.encode(value ,"UTF-8") );
                 flag = 1;
             }
 

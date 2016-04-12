@@ -31,7 +31,8 @@
 
                 <TextView
                     style="@style/publsh_text_item"
-                    android:text="Runner" />
+                    android:text="Runner"
+                    android:id="@+id/task_detail_runner"/>
             </LinearLayout>
 
             <LinearLayout style="@style/publish_layout_item">
@@ -47,7 +48,8 @@
 
                 <TextView
                     style="@style/publsh_text_item"
-                    android:text="@string/location_pick" />
+                    android:text="@string/location_pick"
+                    android:id="@+id/task_detail_source_address"/>
             </LinearLayout>
 
             <LinearLayout style="@style/publish_layout_item">
@@ -62,7 +64,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/accept_time_pick"
+                    android:id="@+id/task_detail_gain_time"
                     style="@style/publsh_text_item"
                     android:text="@string/time_pick" />
             </LinearLayout>
@@ -80,7 +82,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/accept_location_delivery"
+                    android:id="@+id/task_detail_target_address"
                     style="@style/publsh_text_item"
                     android:layout_gravity="center_vertical"
                     android:text="@string/locaiton_delivery" />
@@ -98,7 +100,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/accept_time_delivery"
+                    android:id="@+id/task_detail_delivery_time"
                     style="@style/publsh_text_item"
                     android:text="@string/time_delivery" />
             </LinearLayout>
@@ -115,7 +117,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/accept_category"
+                    android:id="@+id/task_detail_category"
                     style="@style/publsh_text_item"
                     android:text="@string/item_category" />
 
@@ -133,7 +135,7 @@
                     android:layout_weight="1" />
 
                 <RatingBar
-                    android:id="@+id/accept_emergency"
+                    android:id="@+id/task_detail_emergency"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
@@ -153,7 +155,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/accept_pay"
+                    android:id="@+id/task_detail_pay"
                     style="@style/publsh_text_item"
                     android:text="@string/publish_pay" />
 
@@ -171,7 +173,7 @@
                     android:layout_weight="1" />
 
                 <TextView
-                    android:id="@+id/accept_consignee"
+                    android:id="@+id/task_detail_consignee"
                     style="@style/publsh_text_item"
                     android:text="@string/publish_consignee" />
             </LinearLayout>

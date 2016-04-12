@@ -45,6 +45,10 @@ public class MyDeliveryFragment extends Fragment {
         Bundle bundle = getArguments();
         user = (User) bundle.getSerializable(User.class.getName());
 
+//        user = new User(bundle.getString("account"),bundle.getString("passwd"));
+//        user.login();
+
+
         Bundle bundle_all = new Bundle();
         bundle_all.putString("account",user.getAccount());
         bundle_all.putString("type","all");
