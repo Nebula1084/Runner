@@ -13,8 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
 
@@ -25,12 +23,12 @@ import se.runner.R;
 import se.runner.request.HttpCallback;
 import se.runner.task.Task;
 import se.runner.user.User;
-import se.runner.widget.CaptureActivityAnyOrientation;
 
 
 public class MainActivity extends AppCompatActivity
 {
     final public static int MAIN_QR_SCAN = 0x000A;
+
     final private String TAG="Main";
 
     private User user;
@@ -139,12 +137,23 @@ public class MainActivity extends AppCompatActivity
         if (resultCode != RESULT_OK)
             return;
 
+        Log.e(TAG,"return to main。requst code = "+ requestCode);
         switch (requestCode)
         {
             case MAIN_QR_SCAN:
                 String jsonString = data.getStringExtra(ScanActivity.SCAN_URL);
                 Toast.makeText(this,jsonString , Toast.LENGTH_LONG).show();
                 handleQRResult(jsonString);
+                break;
+            case UserCenterFragment.CONTACT_LIST:
+                Log.e(TAG,"ContactActivity returned");
+                String [] tmpList = data.getStringArrayExtra(ContactActivity.LIST_DATA);
+                if( tmpList != null && tmpList[0].equals("<Empty-List>") == false )
+                {
+                    user.setContactList( tmpList );
+                    Log.e(TAG,"user contact list updated");
+                }
+
                 break;
         }
     }

@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import se.runner.request.HttpCallback;
@@ -150,6 +151,16 @@ public class User implements Serializable
         }).execute();
 
         return false;
+    }
+
+    public void setContactList(List<String> list)
+    {
+        contactList = list;
+    }
+
+    public void setContactList(String [] strings )
+    {
+        contactList = new ArrayList<>(Arrays.asList(strings));
     }
 
     public boolean isRegistered()
