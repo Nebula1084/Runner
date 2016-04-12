@@ -350,6 +350,16 @@ public class Task implements Serializable {
         return create_timestamp;
     }
 
+    public long getActual_gain_time()
+    {
+        return actual_gain_time;
+    }
+
+    public long getActual_delivery_time()
+    {
+        return actual_delivery_time;
+    }
+
     public int getId() {
         return id;
     }
