@@ -106,6 +106,22 @@ public class CommentActivity extends AppCompatActivity {
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
+
+                    HttpCallback httpCallback1 = new HttpCallback()
+                    {
+                        @Override
+                        public void onPost(String get)
+                        {
+                            if( get == null )
+                                Log.e(TAG,"server response is null");
+                            else if( get.equals("success") != false )
+                            {
+                                //accroding my debug, I notice that even finish success, will still goto this block
+                            }
+
+                        }
+                    };
+                    task.finish( task.getId() , httpCallback1 );
                 }
                 else
                 {

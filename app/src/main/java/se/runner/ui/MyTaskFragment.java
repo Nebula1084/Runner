@@ -1,11 +1,8 @@
 package se.runner.ui;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +10,6 @@ import android.view.ViewGroup;
 import io.karim.MaterialTabs;
 import se.runner.R;
 import se.runner.user.User;
-import se.runner.widget.TaskListFragment;
 
 public class MyTaskFragment extends Fragment
 {
@@ -26,9 +22,9 @@ public class MyTaskFragment extends Fragment
     private User user;
 
     private MyTaskListFragment task_list_frg_all;
-    private MyTaskListFragment task_list_frg_wait_Acpt;
-    private MyTaskListFragment task_list_frg_completed;
-    private MyTaskListFragment task_list_frg_out;
+    private MyTaskListFragment task_list_frg_progress;
+    private MyTaskListFragment task_list_frg_wait_cmt;
+    private MyTaskListFragment task_list_frg_finished;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,14 +34,14 @@ public class MyTaskFragment extends Fragment
 
         runnerPagerAdapter = new RunnerPagerAdapter(getContext(), getChildFragmentManager());
         task_list_frg_all = new MyTaskListFragment();
-        task_list_frg_wait_Acpt = new MyTaskListFragment();
-        task_list_frg_completed = new MyTaskListFragment();
-        task_list_frg_out = new MyTaskListFragment();
+        task_list_frg_progress = new MyTaskListFragment();
+        task_list_frg_wait_cmt = new MyTaskListFragment();
+        task_list_frg_finished = new MyTaskListFragment();
 
         runnerPagerAdapter.setItem(getContext().getString(R.string.all_task), task_list_frg_all, null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.not_delivered), task_list_frg_wait_Acpt, null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.task_finished), task_list_frg_completed, null);
-        runnerPagerAdapter.setItem(getContext().getString(R.string.task_unavailable), task_list_frg_out, null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.not_delivered), task_list_frg_progress, null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.task_wait_comment), task_list_frg_wait_cmt, null);
+        runnerPagerAdapter.setItem(getContext().getString(R.string.task_finished), task_list_frg_finished, null);
 
         mytask_view_pager.setAdapter(runnerPagerAdapter);
         mytask_tabs.setViewPager(mytask_view_pager);
@@ -62,17 +58,17 @@ public class MyTaskFragment extends Fragment
         Bundle bundle_wt_acpt = new Bundle();
         bundle_wt_acpt.putString("type","wait_Acpt");
         bundle_wt_acpt.putString("account",user.getAccount());
-        task_list_frg_wait_Acpt.setArguments( bundle_wt_acpt );
+        task_list_frg_progress.setArguments( bundle_wt_acpt );
 
         Bundle bundle_completed = new Bundle();
-        bundle_completed.putString("type","completed");
+        bundle_completed.putString("type","wait_cmt");
         bundle_completed.putString("account",user.getAccount());
-        task_list_frg_completed.setArguments( bundle_completed );
+        task_list_frg_wait_cmt.setArguments( bundle_completed );
 
         Bundle bundle_out = new Bundle();
-        bundle_out.putString("type","out");
+        bundle_out.putString("type","finish");
         bundle_out.putString("account",user.getAccount());
-        task_list_frg_out.setArguments( bundle_out );
+        task_list_frg_finished.setArguments( bundle_out );
 
         return view;
     }

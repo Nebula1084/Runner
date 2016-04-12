@@ -21,7 +21,7 @@ import se.runner.request.HttpPost;
 public class User implements Serializable
 {
     final private String TAG = "USER";
-    final private static boolean DEBUG = true;
+    final private static boolean DEBUG = false ;
 
     private String account;
     private String passwd;
@@ -346,21 +346,25 @@ public class User implements Serializable
                     //// TODO: 3/31/16 set address
                     parseServerResponse(get);
 
-                    new AlertDialog.Builder(context)
-                            .setTitle("设置地址成功")
-                            .setMessage("您的地址更改为："+address)
-                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // continue
-                                }
-                            })
-                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    if( DEBUG )
+                    {
+                        new AlertDialog.Builder(context)
+                                .setTitle("设置地址成功")
+                                .setMessage("您的地址更改为："+address)
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+
                 }
             }
         }).execute();
@@ -403,23 +407,26 @@ public class User implements Serializable
                 }
                 else
                 {
-                    //// TODO: 3/31/16 set averagerate
                     parseServerResponse(get);
-                    new AlertDialog.Builder(context)
-                            .setTitle("更改评分成功")
-                            .setMessage("您的评分为："+averagerate)
-                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // continue
-                                }
-                            })
-                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    if( DEBUG )
+                    {
+                        new AlertDialog.Builder(context)
+                                .setTitle("更改评分成功")
+                                .setMessage("您的评分为："+averagerate)
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+
                 }
             }
         }).execute();
@@ -520,21 +527,24 @@ public class User implements Serializable
 //                    parseServerResponse(get);
                     getInfo();
 
-                    new AlertDialog.Builder(context)
-                            .setTitle("存钱成功")
-                            .setMessage("您的余额为："+balance)
-                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // continue
-                                }
-                            })
-                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+                    if( DEBUG )
+                    {
+                        new AlertDialog.Builder(context)
+                                .setTitle("存钱成功")
+                                .setMessage("您的余额为："+balance)
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
                 }
             }
         }).execute();
@@ -577,21 +587,25 @@ public class User implements Serializable
                 else
                 {
                     parseServerResponse(get);
-                    new AlertDialog.Builder(context)
-                            .setTitle("转账成功")
-                            .setMessage("您成功为"+(String)other.getAccount()+"转账"+amount+"。您的余额为："+balance)
-                            .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // continue
-                                }
-                            })
-                            .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // do nothing
-                                }
-                            })
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .show();
+
+                    if( DEBUG )
+                    {
+                        new AlertDialog.Builder(context)
+                                .setTitle("转账成功")
+                                .setMessage("您成功为"+(String)other.getAccount()+"转账"+amount+"。您的余额为："+balance)
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
                 }
             }
         }).execute();
@@ -718,15 +732,6 @@ public class User implements Serializable
                 else if(get.equals("logout success"))
                 {
                     login = 0;
-                }
-                else
-                {
-                    Log.e(TAG,"logout can't fail");
-                    //// TODO: 3/30/16 User-logout failed
-                }
-
-                if( login == 0 )
-                {
                     new AlertDialog.Builder(context)
                             .setTitle("登出成功")
                             .setMessage("时刻等着你哦~")
@@ -742,6 +747,10 @@ public class User implements Serializable
                             })
                             .setIcon(android.R.drawable.ic_dialog_alert)
                             .show();
+                }
+                else
+                {
+                    Log.e(TAG,"logout can't fail");
                 }
             }
         }).execute();

@@ -64,10 +64,14 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
 
         int task_status = parse_task_status(task.getStatus());
 
+
+        boolean isCommented = (task_status == 6);
         for(int i=0;i<task_status; i++)
         {
-            add_status( i );
+            add_status( i , isCommented );
         }
+
+
 
 
 
@@ -90,7 +94,7 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         return task_status;
     }
 
-    public void add_status( int code)
+    public void add_status( int code , boolean isCommented )
     {
         switch (code)
         {
@@ -98,7 +102,7 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
             case 1: add_accept_status();break;
             case 2: add_progress_status();break;
             case 3: add_delivered_status();break;
-            case 4: add_completed_status();break;
+            case 4: add_completed_status( isCommented );break;
             case 5: add_comment_status();break;
             default: break;
         }
@@ -152,7 +156,7 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         isAdd_delivered_status = true;
     }
 
-    public void add_completed_status(  )
+    public void add_completed_status( boolean isCommented )
     {
         if( isAdd_completed_status )
             return ;
@@ -163,6 +167,9 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
         textview.setText("已付款，等待评价\n"+ MyToolKit.milles_to_chinese_format( task.getActual_delivery_time() ));
 
+
+        if( isCommented )
+            return ;
 
         LinearLayout linearLayout2 = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_task_finished, task_status_queue);
 

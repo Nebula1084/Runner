@@ -33,7 +33,7 @@
     <string name="widget_choose_time">请选择时间</string>
     <string name="all_delivey">全部配送</string>
     <string name="deliverying">正在配送</string>
-    <string name="deliveryed">已完成</string>
+    <string name="deliveryed">已送达</string>
     <string name="all_task">全部任务</string>
     <string name="not_delivered">待收货</string>
     <string name="task_finished">已完成</string>
@@ -56,4 +56,5 @@
     <string name="my_task">我的任务</string>
     <string name="task_comment">任务评价</string>
     <string name="input_address">请输入地址</string>
+    <string name="task_wait_comment">待评价</string>
 </resources>

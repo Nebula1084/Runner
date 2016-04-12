@@ -42,14 +42,6 @@ public class MyDeliveryListFragment extends TaskListFragment implements TaskList
 
         refreshTasks();
 
-//
-//        /*for test*/
-//        List<Task> tasks = new ArrayList<>();
-//        tasks.add(new Task());
-//        tasks.add(new Task());
-//        setTasks(tasks);
-//        /*until here*/
-
     }
 
     public void refreshTasks()
@@ -93,9 +85,7 @@ public class MyDeliveryListFragment extends TaskListFragment implements TaskList
 
                     if ( type.equals("progress") && status != 2 )
                         continue;
-                    else if( type.equals("completed") && status != 3)
-                        continue;
-                    else if( type.equals("out") && status != 4)
+                    else if( type.equals("completed") && status < 3 )
                         continue;
 
 

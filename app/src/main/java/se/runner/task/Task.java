@@ -176,36 +176,36 @@ public class Task implements Serializable {
             case 0: status = TaskStatus.PUBLISHED;break;
             case 1: status = TaskStatus.ACCEPTED;break;
             case 2: status = TaskStatus.PROGRESS;break;
-            case 3: status = TaskStatus.DELIVERED;break;
-            case 4: status = TaskStatus.COMPLETED;break;
+            case 3: status = TaskStatus.COMPLETED;break;
+            case 4: status = TaskStatus.RATED;break;
         }
     }
 
     // no account validation check, may not safe
     // once publish successful, a task will be created.
-    public Task(Context ctx,
-                final String taskLauncherAccount,
-                final String taskCategory,
-                final String taskConsigneeAccount,
-                final float pay,
-                final long delivery_time,
-                final long receiving_time,
-                final String delivery_address,
-                final String receiving_address,
-                final int emergencyLevel) {
-        context = ctx;
-
-        taskLauncher = taskLauncherAccount;
-        category = taskCategory;
-        taskConsignee = taskConsigneeAccount;
-        payment = pay;
-
-        required_delivery_time = delivery_time;
-        required_gain_time = receiving_time;
-        target_address = delivery_address;
-        source_address = receiving_address;
-        emergency = emergencyLevel;
-    }
+//    public Task(Context ctx,
+//                final String taskLauncherAccount,
+//                final String taskCategory,
+//                final String taskConsigneeAccount,
+//                final float pay,
+//                final long delivery_time,
+//                final long receiving_time,
+//                final String delivery_address,
+//                final String receiving_address,
+//                final int emergencyLevel) {
+//        context = ctx;
+//
+//        taskLauncher = taskLauncherAccount;
+//        category = taskCategory;
+//        taskConsignee = taskConsigneeAccount;
+//        payment = pay;
+//
+//        required_delivery_time = delivery_time;
+//        required_gain_time = receiving_time;
+//        target_address = delivery_address;
+//        source_address = receiving_address;
+//        emergency = emergencyLevel;
+//    }
 
     public void publish() {
         HttpCallback httpCallback = new HttpCallback() {
