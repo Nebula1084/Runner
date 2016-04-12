@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import se.runner.request.HttpCallback;
 import se.runner.request.HttpPost;
@@ -33,6 +35,7 @@ public class User implements Serializable
     private double longtitude;
     private int launchTaskNum;
     private int takeTaskNum;
+    private List<String> contactList;
     transient Context context;
 
     public User(String account, String passwd)
@@ -47,6 +50,7 @@ public class User implements Serializable
         launchTaskNum = 0;
         takeTaskNum = 0;
         register = false;
+        contactList = new ArrayList<>();
     }
 
     public User(Context ctx, String account, String passwd)
@@ -62,6 +66,7 @@ public class User implements Serializable
         launchTaskNum = 0;
         takeTaskNum = 0;
         register = false;
+        contactList = new ArrayList<>();
     }
 
     public boolean isRegistered(HttpCallback httpCallback)
@@ -174,6 +179,16 @@ public class User implements Serializable
 
     public String getIcon() {
         return icon;
+    }
+
+    public int getLaunchTaskNum()
+    {
+        return launchTaskNum;
+    }
+
+    public int getTakeTaskNum()
+    {
+        return takeTaskNum;
     }
 
     public double getBalance() {
@@ -917,6 +932,8 @@ public class User implements Serializable
             longtitude = (double) jsonObject.get("longtitude");
             launchTaskNum = (int) jsonObject.get("launchTaskNum");
             takeTaskNum = (int ) jsonObject.get("takeTaskNum");
+            contactList = (List<String>) jsonObject.get("contacts");
+
 //            timestamp = (int) jsonObject.get("timestamp");
 //            Log.e(TAG,"register result:address="+getAddress());
         }
