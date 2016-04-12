@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tool_bar"
@@ -10,6 +12,12 @@
         android:background="?attr/colorPrimary">
 
     </android.support.v7.widget.Toolbar>
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:id="@+id/address_edit_text"
+        style="@style/login_text"
+        android:hint="@string/input_address"
+        app:met_baseColor="@color/md_black_1000" />
 
     <com.gc.materialdesign.views.ButtonFlat
         android:id="@+id/map_confirm"

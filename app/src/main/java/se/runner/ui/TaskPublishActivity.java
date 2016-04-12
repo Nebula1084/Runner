@@ -129,13 +129,13 @@ public class TaskPublishActivity extends AppCompatActivity {
                 emergency,
                 delivery_time,
                 gain_time,
-                source_address,
                 target_address,
+                source_address,
                 0,
                 0,
                 0,
                 0,
-                "");
+                "null");
 
         HttpCallback httpCallback = new HttpCallback()
         {
@@ -199,15 +199,6 @@ public class TaskPublishActivity extends AppCompatActivity {
     @OnClick(R.id.publish_category_picker)
     void pickCategory()
     {
-//        List<String> typeList = new ArrayList<>();
-//        typeList.add("玉泉快递");
-//        typeList.add("紫金港快递");
-//        typeList.add("西溪快递");
-//        typeList.add("华家池快递");
-//        typeList.add("舟山快递");
-//        typeList.add("之江快递");
-//        typeList.add("其他");
-
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("请选择任务类别")
                 .setItems( R.array.task_type_list , new DialogInterface.OnClickListener() {
@@ -241,45 +232,15 @@ public class TaskPublishActivity extends AppCompatActivity {
     {
         publishPickTimePicker.show();
         gain_time = publishPickTimePicker.getCalendar().getTimeInMillis();
-
-        new AlertDialog.Builder(context)
-                .setTitle("设置取货时间")
-                .setMessage("您设置取货时间为"+gain_time)
-                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // continue
-                    }
-                })
-                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
     }
 
     @OnClick(R.id.publish_time_delivery_picker)
     void pickDeliveryTime()
     {
         publishDeliveryTimePicker.show();
+        long old_time = delivery_time;
         delivery_time = publishDeliveryTimePicker.getCalendar().getTimeInMillis();
-
-        new AlertDialog.Builder(context)
-                .setTitle("设置送货时间")
-                .setMessage("您设置送货时间为"+delivery_time)
-                .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // continue
-                    }
-                })
-                .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        Log.e(TAG,"old time="+old_time+",new time="+delivery_time);
     }
 
     @OnClick(R.id.publish_pay_picker)
@@ -344,20 +305,24 @@ public class TaskPublishActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode != RESULT_OK)
             return;
+
+        String address;
         switch (requestCode) {
             case TASK_PICK_LOCATION:
-                Toast.makeText(this,
-                        "取货点{经度:" +
-                                data.getFloatExtra(MapActivity.LONGITUDE, -1) +
-                                ",纬度:" + data.getFloatExtra(MapActivity.LATITUDE, -1) + "}",
-                        Toast.LENGTH_LONG).show();
+                address = data.getStringExtra("address");
+                if( address != null && address.length() != 0)
+                {
+                    Toast.makeText(TaskPublishActivity.this, address, Toast.LENGTH_LONG).show();
+                    source_address = address;
+                }
                 break;
             case TASK_DELIVERY_LOCATION:
-                Toast.makeText(this,
-                        "收获点{经度:" +
-                                data.getFloatExtra(MapActivity.LONGITUDE, -1) +
-                                ",纬度:" + data.getFloatExtra(MapActivity.LATITUDE, -1) + "}",
-                        Toast.LENGTH_LONG).show();
+                address = data.getStringExtra("address");
+                if( address != null && address.length() != 0)
+                {
+                    Toast.makeText(TaskPublishActivity.this, address, Toast.LENGTH_LONG).show();
+                    target_address = address;
+                }
                 break;
         }
     }

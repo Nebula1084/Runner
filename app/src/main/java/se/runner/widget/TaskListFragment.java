@@ -74,8 +74,13 @@ public class TaskListFragment extends Fragment implements PtrHandler
         return view;
     }
 
-    public void setAdapter(TaskListAdapter adapter) {
+    public void setAdapter(TaskListAdapter adapter)
+    {
+        if( adapter == null )
+            return ;
+
         this.adapter = adapter;
+        update();
     }
 
     public void setOnRefreshListener(OnRefreshListener onRefreshListener) {
@@ -85,20 +90,27 @@ public class TaskListFragment extends Fragment implements PtrHandler
     public void setTasks(List<Task> tasks)
     {
         this.tasks = tasks;
-        if( adapter != null )
+        if( adapter != null ) {
             adapter.setTasks(this.tasks);
+            update();
+        }
     }
 
-    public void addTask(Task task) {
+    public void addTask(Task task)
+    {
         adapter.addTask(task);
+        update();
     }
 
     public void removeTask(Task task) {
         adapter.removeTask(task);
+        update();
     }
 
-    public void removeTask(int index) {
+    public void removeTask(int index)
+    {
         adapter.removeTask(index);
+        update();
     }
 
     public void update() {

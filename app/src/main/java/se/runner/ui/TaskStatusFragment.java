@@ -20,6 +20,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 import in.srain.cube.views.ptr.header.StoreHouseHeader;
 import se.runner.R;
 import se.runner.task.Task;
+import se.runner.widget.MyToolKit;
 
 public class TaskStatusFragment extends Fragment implements PtrHandler
 {
@@ -72,13 +73,6 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
 
     }
 
-    public String milles_to_chinese_format(long time_in_mills)
-    {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis( time_in_mills );
-        return calendar.get(Calendar.YEAR)+"年"+calendar.get(Calendar.MONTH)+"月"+calendar.get(Calendar.DAY_OF_MONTH)+"日"+calendar.get(Calendar.HOUR_OF_DAY)+"时"+calendar.get(Calendar.MINUTE)+"分"+calendar.get(Calendar.SECOND)+"秒";
-    }
-
     public int parse_task_status(Task.TaskStatus s)
     {
         int task_status = 0;
@@ -118,7 +112,7 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
 
         TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-        textview.setText("已发布,等待被抢单\n"+ milles_to_chinese_format(task.getCreate_timestamp() ));
+        textview.setText("已发布,等待被抢单\n"+ MyToolKit.milles_to_chinese_format(task.getCreate_timestamp() ));
         isAdd_publish_status = true;
     }
 
@@ -130,7 +124,7 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
 
         TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-        textview.setText("已被抢单，等待接货开始任务\n"+ milles_to_chinese_format( task.getActual_gain_time() ));
+        textview.setText("已被抢单，等待接货开始任务\n"+ MyToolKit.milles_to_chinese_format( task.getActual_gain_time() ));
         isAdd_accept_status = true;
     }
 
@@ -154,7 +148,7 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
 
         TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-        textview.setText("货物已送达\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
+        textview.setText("货物已送达\n"+ MyToolKit.milles_to_chinese_format( task.getActual_delivery_time() ));
         isAdd_delivered_status = true;
     }
 
@@ -167,7 +161,7 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
 
         TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-        textview.setText("已付款，等待评价\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
+        textview.setText("已付款，等待评价\n"+ MyToolKit.milles_to_chinese_format( task.getActual_delivery_time() ));
 
 
         LinearLayout linearLayout2 = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_task_finished, task_status_queue);

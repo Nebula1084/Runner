@@ -46,9 +46,9 @@ public class TaskDetailFragment extends Fragment {
         if( task != null )
         {
             detail_runner.setText(task.getTaskShipper());
-            detail_source_address.setText(task.getReceivingAddress());
+            detail_source_address.setText(task.getSource_address());
             detail_gain_time.setText(task.getRequired_gain_time()+"");
-            detail_target_address.setText(task.getDeliveryAddress());
+            detail_target_address.setText(task.getTarget_address());
             detail_delivery_time.setText( task.getRequired_delivery_time() +"");
             detail_category.setText( task.getCategory() );
             detail_payment.setText( task.getPayment() +"");

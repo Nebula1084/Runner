@@ -57,8 +57,8 @@ public class Task implements Serializable {
     private String taskShipper;
     private String taskConsignee;
 
-    private String deliveryAddress;
-    private String receivingAddress;
+    private String target_address;
+    private String source_address;
 
     private transient Context context;
 
@@ -68,8 +68,8 @@ public class Task implements Serializable {
         payment = 30;
         emergency = 1;
         status = TaskStatus.PROGRESS;
-        deliveryAddress = "deliveryAddress";
-        receivingAddress = "receivingAddress";
+        target_address = "target_address";
+        source_address = "source_address";
         taskLauncher = "taskLauncher";
         taskShipper = "taskShipper";
         taskShipper = "taskShipper";
@@ -158,8 +158,8 @@ public class Task implements Serializable {
         category = taskCategory;
         create_timestamp = timestamp;
         payment = pay;
-        deliveryAddress = delivery_address;
-        receivingAddress = receiving_address;
+        target_address = delivery_address;
+        source_address = receiving_address;
         emergency = emergencyLevel;
         rate = rateCode;
 
@@ -202,8 +202,8 @@ public class Task implements Serializable {
 
         required_delivery_time = delivery_time;
         required_gain_time = receiving_time;
-        deliveryAddress = delivery_address;
-        receivingAddress = receiving_address;
+        target_address = delivery_address;
+        source_address = receiving_address;
         emergency = emergencyLevel;
     }
 
@@ -243,8 +243,8 @@ public class Task implements Serializable {
         para.put("pay", payment + "");
         para.put("delivery_time", required_delivery_time + "");
         para.put("receiving_time", required_gain_time + "");
-        para.put("delivery_address", deliveryAddress);
-        para.put("receiving_address", receivingAddress);
+        para.put("delivery_address", target_address);
+        para.put("receiving_address", source_address);
         para.put("emergency", emergency + "");
 
         new HttpPost("/publish", para, httpCallback).execute();
@@ -258,8 +258,8 @@ public class Task implements Serializable {
         para.put("pay", payment + "");
         para.put("delivery_time", required_delivery_time + "");
         para.put("receiving_time", required_gain_time + "");
-        para.put("delivery_address", deliveryAddress);
-        para.put("receiving_address", receivingAddress);
+        para.put("delivery_address", target_address);
+        para.put("receiving_address", source_address);
         para.put("emergency", emergency + "");
 
         new HttpPost("/publish", para, httpCallback).execute();
@@ -597,12 +597,12 @@ public class Task implements Serializable {
 
     }
 
-    public String getDeliveryAddress() {
-        return deliveryAddress;
+    public String getTarget_address() {
+        return target_address;
     }
 
-    public String getReceivingAddress() {
-        return receivingAddress;
+    public String getSource_address() {
+        return source_address;
     }
 
     public String getTaskLauncher() {
@@ -646,8 +646,8 @@ public class Task implements Serializable {
         builder.append("emergency="+emergency+";");
         builder.append("delivery_time="+required_delivery_time+";");
         builder.append("recieving_time="+required_gain_time+";");
-        builder.append("delivery_address="+deliveryAddress+";");
-        builder.append("recieving_address="+receivingAddress+";");
+        builder.append("delivery_address="+ target_address +";");
+        builder.append("recieving_address="+ source_address +";");
         builder.append("status="+status+";");
         builder.append("rate="+rate+";");
         builder.append("gain_time="+actual_gain_time+";");
@@ -673,8 +673,8 @@ public class Task implements Serializable {
         builder.append("\"emergency\":"+getEmergency()+",");
         builder.append("\"delivery_time\":"+getRequired_delivery_time()+",");
         builder.append("\"recieving_time\":"+getRequired_gain_time()+",");
-        builder.append("\"delivery_address\":"+getDeliveryAddress()+",");
-        builder.append("\"recieving_address\":"+getReceivingAddress()+",");
+        builder.append("\"delivery_address\":"+ getTarget_address()+",");
+        builder.append("\"recieving_address\":"+ getSource_address()+",");
         builder.append("\"status\":"+getStatusInt()+",");
         builder.append("\"rate\":"+getRate()+",");
         builder.append("\"gain_time\":"+getActual_gain_time()+",");

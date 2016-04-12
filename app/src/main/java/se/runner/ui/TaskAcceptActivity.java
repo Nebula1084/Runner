@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import se.runner.R;
 import se.runner.request.HttpCallback;
 import se.runner.task.Task;
+import se.runner.widget.MyToolKit;
 
 public class TaskAcceptActivity extends AppCompatActivity {
     final private String TAG = "TaskAccept";
@@ -86,13 +87,13 @@ public class TaskAcceptActivity extends AppCompatActivity {
         }
 
 
-        accept_location_pick.setText(task.getDeliveryAddress());
-        accept_location_delivery.setText(task.getReceivingAddress());
+        accept_location_pick.setText(task.getSource_address());
+        accept_location_delivery.setText(task.getTarget_address());
         accept_consignee.setText(task.getTaskConsignee());
         accept_pay.setText(task.getPayment()+"");
         accetp_category.setText(task.getCategory());
-        accept_time_pick.setText(task.getRequired_gain_time()+"");
-        accept_time_delivery.setText(task.getRequired_delivery_time()+"");
+        accept_time_pick.setText(MyToolKit.milles_to_chinese_format( task.getRequired_gain_time() ));
+        accept_time_delivery.setText( MyToolKit.milles_to_chinese_format( task.getRequired_delivery_time() ) );
         accept_emergency.setRating(task.getEmergency());
 
     }

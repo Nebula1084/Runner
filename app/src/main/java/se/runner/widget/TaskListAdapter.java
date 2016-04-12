@@ -1,7 +1,6 @@
 package se.runner.widget;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -72,10 +70,10 @@ public class TaskListAdapter extends BaseAdapter {
 
                     // address
                     holder.task_source_addr = (TextView ) convertView.findViewById(R.id.task_large_source_address);
-                    holder.task_source_addr.setText( tasks.get(position).getDeliveryAddress()  );
+                    holder.task_source_addr.setText( tasks.get(position).getSource_address()  );
 
                     holder.task_target_addr = (TextView) convertView.findViewById(R.id.task_large_target_address);
-                    holder.task_source_addr.setText( tasks.get(position).getReceivingAddress()  );
+                    holder.task_target_addr.setText( tasks.get(position).getTarget_address()  );
 
                     // rating bar
                     holder.task_rating_bar = (RatingBar) convertView.findViewById(R.id.task_rating);
@@ -88,7 +86,7 @@ public class TaskListAdapter extends BaseAdapter {
                     //payment
                     holder.task_large_payment = (TextView) convertView.findViewById(R.id.task_large_pay);
                     holder.task_large_payment.setText( tasks.get(position).getPayment() + "");
-//                    Log.e("TaskAdapter","pos="+position+",source_address="+tasks.get(position).getDeliveryAddress() );
+//                    Log.e("TaskAdapter","pos="+position+",source_address="+tasks.get(position).getTarget_address() );
 
                     convertView.setTag(holder);
                 } else {
@@ -107,10 +105,10 @@ public class TaskListAdapter extends BaseAdapter {
                     holder.task_item_pay.setImageDrawable(new IconDrawable(context, FontAwesomeIcons.fa_dollar));
 
                     holder.task_source_addr = (TextView ) convertView.findViewById(R.id.task_small_source_address);
-                    holder.task_source_addr.setText( tasks.get(position).getDeliveryAddress()  );
+                    holder.task_source_addr.setText( tasks.get(position).getSource_address()  );
 
                     holder.task_target_addr = (TextView) convertView.findViewById(R.id.task_small_target_address);
-                    holder.task_source_addr.setText( tasks.get(position).getReceivingAddress()  );
+                    holder.task_target_addr.setText( tasks.get(position).getTarget_address()  );
 
                     // type
                     holder.task_large_taskType = (TextView) convertView.findViewById(R.id.task_small_type);
@@ -137,7 +135,7 @@ public class TaskListAdapter extends BaseAdapter {
                     }
                     holder.task_small_status.setText(status);
 
-//                    Log.e("TaskAdapter","small::pos="+position+",source_address="+tasks.get(position).getDeliveryAddress() );
+//                    Log.e("TaskAdapter","small::pos="+position+",source_address="+tasks.get(position).getTarget_address() );
 
                     convertView.setTag(holder);
                 } else {

@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -42,6 +43,7 @@ import com.amap.api.services.geocoder.GeocodeResult;
 import com.amap.api.services.geocoder.GeocodeSearch;
 import com.amap.api.services.geocoder.RegeocodeQuery;
 import com.amap.api.services.geocoder.RegeocodeResult;
+import com.rengwuxian.materialedittext.MaterialEditText;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -59,6 +61,8 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
     final public static String LONGITUDE = "longitude";
     final public static String LATITUDE = "latitude";
 
+    final private static boolean show_blue_arrow = false;
+
     private AMap aMap;
     private MapView mapView;
     private LocationSource.OnLocationChangedListener mListener;
@@ -69,18 +73,19 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
     private GeocodeSearch geocoderSearch;
     private String addressName;
     private Marker geoMarker;
-    private Marker regeoMarker;
     private LatLonPoint latLonPoint = new LatLonPoint(40.003662, 116.465271);
 
     private Double selfLatitude,selfLongtitude;
 
+    private MaterialEditText address_edit;
 
     private Intent result;
     @Bind(R.id.tool_bar)
     Toolbar tool_bar;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
@@ -92,16 +97,15 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
 
         AMapLocationClient.setApiKey("6fb01cc4afb8c3c461b106a89d16d558");
 
+
+        address_edit = (MaterialEditText) findViewById(R.id.address_edit_text);
+
         mapView = (MapView) findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);
         init();
 
 
         result = new Intent();
-        /*This part is demo*/
-        result.putExtra(LONGITUDE, 1.1);
-        result.putExtra(LATITUDE, 1.1);
-        /*Until here*/
 
         Log.e("Map","sha1="+sHA1(this));
     }
@@ -116,14 +120,6 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
                     .position(new LatLng(30.761609, 120.122645))
                     .draggable(true));
 
-            regeoMarker = aMap.addMarker(new MarkerOptions().anchor(0.5f,0.5f)
-                    .title("map")
-                    .position(new LatLng(31.761609, 120.122645))
-                    .draggable(true));
-//
-//            if( geoMarker.isDraggable() == false)
-//                Log.e("??","I set it draggable!!!");
-
             setUpMap();
         }
 
@@ -136,18 +132,23 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
     {
         // 自定义系统定位小蓝点
         MyLocationStyle myLocationStyle = new MyLocationStyle();
-        myLocationStyle.myLocationIcon(BitmapDescriptorFactory
-                .fromResource(R.drawable.location_marker));// 设置小蓝点的图标
-        myLocationStyle.strokeColor(Color.BLACK);// 设置圆形的边框颜色
-        myLocationStyle.radiusFillColor(Color.argb(100, 0, 0, 180));// 设置圆形的填充颜色
-        // myLocationStyle.anchor(int,int)//设置小蓝点的锚点
-        myLocationStyle.strokeWidth(1.0f);// 设置圆形的边框粗细
 
-        aMap.setMyLocationStyle(myLocationStyle);
+        if( show_blue_arrow )
+        {
+            myLocationStyle.myLocationIcon(BitmapDescriptorFactory
+                    .fromResource(R.drawable.location_marker));// 设置小蓝点的图标
+            myLocationStyle.strokeColor(Color.BLACK);// 设置圆形的边框颜色
+            myLocationStyle.radiusFillColor(Color.argb(100, 0, 0, 180));// 设置圆形的填充颜色
+            // myLocationStyle.anchor(int,int)  //设置小蓝点的锚点
+            myLocationStyle.strokeWidth(1.0f);// 设置圆形的边框粗细
+
+            aMap.setMyLocationStyle(myLocationStyle);
+        }
+
         aMap.setLocationSource(this);// 设置定位监听
         aMap.getUiSettings().setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
         aMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
-        // aMap.setMyLocationType()
+
 
         // set marker
 
@@ -199,8 +200,7 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
                 selfLatitude = amapLocation.getLatitude();
                 selfLongtitude = amapLocation.getLongitude();
 
-//                Log.e("latitude",""+selfLatitude);
-//                Log.e("longtitude",""+selfLongtitude);
+                geoMarker.setPosition(new LatLng(selfLatitude,selfLongtitude));
             }
             else
             {
@@ -335,9 +335,9 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
                         + "附近";
                 aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
                         convertToLatLng(latLonPoint), 15));
-                regeoMarker.setPosition(convertToLatLng(latLonPoint));
-                regeoMarker.setTitle("您的位置");
-                regeoMarker.setSnippet(addressName);
+                geoMarker.setPosition(convertToLatLng(latLonPoint));
+                geoMarker.setTitle("您的位置");
+                geoMarker.setSnippet(addressName);
                 show(MapActivity.this, addressName);
             }
             else
@@ -412,8 +412,6 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
         Log.e("marker","you end dragging at ("+marker.getPosition().latitude+","+marker.getPosition().longitude+")");
         getAddress(latLonPoint);
     }
-
-
 
 
 
@@ -592,9 +590,11 @@ public class MapActivity extends AppCompatActivity implements LocationSource,
     @OnClick(R.id.map_confirm)
     void confirm()
     {
+        String addr = address_edit.getText().toString();
 
-
+        result.putExtra("address", addr);
         setResult(RESULT_OK, result);
+
         finish();
     }
 }
