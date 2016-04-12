@@ -106,8 +106,8 @@ public class MyDeliveryListFragment extends TaskListFragment implements TaskList
                     Long timestamp = (Long) jsonObject.get("timestamp");
                     double pay = (double) jsonObject.get("pay");
                     int emergency = (int) jsonObject.get("emergency");
-                    Integer delivery_time = (Integer) jsonObject.get("delivery_time");
-                    Integer recieving_time = (Integer ) jsonObject.get("recieving_time");
+                    Long delivery_time = jsonObject.getLong("delivery_time");
+                    Long recieving_time = jsonObject.getLong("recieving_time");
                     String delivery_address = jsonObject.getString("delivery_address");
                     String recieving_address = jsonObject.getString("recieving_address");
 

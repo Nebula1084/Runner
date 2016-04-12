@@ -6,6 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
 
 import se.runner.request.HttpCallback;
@@ -70,6 +73,60 @@ public class Task implements Serializable {
         taskLauncher = "taskLauncher";
         taskShipper = "taskShipper";
         taskShipper = "taskShipper";
+    }
+
+    public static Task parseTaskFromJsonString(String jsonString)
+    {
+        try
+        {
+            JSONObject jsonObject = new JSONObject(jsonString);
+
+            if( jsonObject != null )
+            {
+                // can't cast to long and float
+                int tid = (int) jsonObject.get("tid");
+                String publisher = jsonObject.getString("publisher");
+                String shipper = jsonObject.getString("shipper");
+                String consignee = jsonObject.getString("consignee");
+                String category = jsonObject.getString("category");
+                Long timestamp = (Long) jsonObject.get("timestamp");
+                double pay = (double) jsonObject.get("pay");
+                int emergency = (int) jsonObject.get("emergency");
+                Integer delivery_time = (Integer) jsonObject.get("delivery_time");
+                Integer recieving_time = (Integer) jsonObject.get("recieving_time");
+                String delivery_address = jsonObject.getString("delivery_address");
+                String recieving_address = jsonObject.getString("recieving_address");
+                int status = (int) jsonObject.get("status");
+                int rate = (int) jsonObject.get("rate");
+                Integer gain_time = (Integer) jsonObject.get("gain_time");
+                Integer arrive_time = (Integer) jsonObject.get("arrive_time");
+                String comment = jsonObject.getString("comment");
+
+                return new Task(tid,
+                        publisher,
+                        shipper,
+                        consignee,
+                        category,
+                        timestamp,
+                        (float) pay,
+                        emergency,
+                        delivery_time,
+                        recieving_time,
+                        delivery_address,
+                        recieving_address,
+                        status,
+                        rate,
+                        gain_time,
+                        arrive_time,
+                        comment);
+            }
+        }
+        catch( JSONException jex)
+        {
+            jex.printStackTrace();
+        }
+
+        return null;
     }
 
     public Task(final int tid,
@@ -244,6 +301,8 @@ public class Task implements Serializable {
 
         new HttpPost("/gaincargo", para, httpCallback).execute();
     }
+
+
 
     public void delivercargo(int id, HttpCallback httpCallback) {
         ContentValues para = new ContentValues();

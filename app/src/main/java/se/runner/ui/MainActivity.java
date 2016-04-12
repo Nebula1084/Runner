@@ -1,5 +1,8 @@
 package se.runner.ui;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -19,6 +22,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.karim.MaterialTabs;
 import se.runner.R;
+import se.runner.request.HttpCallback;
+import se.runner.task.Task;
 import se.runner.user.User;
 import se.runner.widget.CaptureActivityAnyOrientation;
 
@@ -29,6 +34,7 @@ public class MainActivity extends AppCompatActivity
     final private String TAG="Main";
 
     private User user;
+    private Context context;
 
     private TaskSquareFragment taskSquareFragment;
     private MyDeliveryFragment myDeliveryFragment;
@@ -52,6 +58,8 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         setSupportActionBar(tool_bar);
+
+        context = this;
 
         taskSquareFragment = new TaskSquareFragment();
         myDeliveryFragment = new MyDeliveryFragment();
@@ -131,11 +139,222 @@ public class MainActivity extends AppCompatActivity
         if (resultCode != RESULT_OK)
             return;
 
-        switch (requestCode){
+        switch (requestCode)
+        {
             case MAIN_QR_SCAN:
-                Toast.makeText(this, data.getStringExtra(ScanActivity.SCAN_URL), Toast.LENGTH_LONG).show();
+                String jsonString = data.getStringExtra(ScanActivity.SCAN_URL);
+                Toast.makeText(this,jsonString , Toast.LENGTH_LONG).show();
+                handleQRResult(jsonString);
                 break;
         }
     }
 
+    public void handleQRResult(String result ) // result is a json string
+    {
+        if (result == null) {
+            new AlertDialog.Builder(context)
+                    .setTitle("解析二维码失败")
+                    .setMessage("您的摄像头近视了")
+                    .setPositiveButton("知道了", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            // continue
+                        }
+                    })
+                    .setNegativeButton("Got it", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
+            return;
+        }
+
+        Task task = Task.parseTaskFromJsonString(result);
+        if (task == null) {
+            new AlertDialog.Builder(context)
+                    .setTitle("无效二维码")
+                    .setMessage("您扫的二维码不是本应用需要的二维码")
+                    .setPositiveButton("我错了", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            // continue
+                        }
+                    })
+                    .setNegativeButton("Got it", new DialogInterface.OnClickListener()
+                    {
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+
+            return;
+        }
+
+        if (task.getStatus() == Task.TaskStatus.ACCEPTED)  // task launcher scan for gain cargon, and then task is in progress
+        {
+            if (user.getAccount().equals(task.getTaskLauncher()) == false) {
+                new AlertDialog.Builder(context)
+                        .setTitle("无效二维码")
+                        .setMessage("您不是本任务的发布者，无权授权他人领取货物，扫描无效")
+                        .setPositiveButton("我错了", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // continue
+                            }
+                        })
+                        .setNegativeButton("Got it", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return;
+            }
+
+            HttpCallback httpCallback = new HttpCallback()
+            {
+                @Override
+                public void onPost(String get)
+                {
+                    if (get == null)
+                        Log.e(TAG, "server response is null");
+                    else if (get.equals("success")) {
+                        new AlertDialog.Builder(context)
+                                .setTitle("成功领取货物")
+                                .setMessage("赶紧送到收货人手里去吧")
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("出了点小问题")
+                                .setMessage("要不您再重新扫下二维码？")
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                }
+            };
+
+            task.gaincargo(task.getId(), httpCallback);
+        } else if (task.getStatus() == Task.TaskStatus.PROGRESS)  // consignee scan for delivery ok, then task is completed
+        {
+            if (user.getAccount().equals(task.getTaskConsignee()) == false) {
+                new AlertDialog.Builder(context)
+                        .setTitle("无效二维码")
+                        .setMessage("您不是本任务的收货人，扫描无效")
+                        .setPositiveButton("我错了", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // continue
+                            }
+                        })
+                        .setNegativeButton("Got it", new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+                return;
+            }
+
+            HttpCallback httpCallback = new HttpCallback()
+            {
+                @Override
+                public void onPost(String get)
+                {
+                    if (get == null)
+                        Log.e(TAG, "server response is null");
+                    else if (get.equals("success")) {
+                        new AlertDialog.Builder(context)
+                                .setTitle("收货人成功收货")
+                                .setMessage("于是，又一笔任务完成了。")
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    } else {
+                        new AlertDialog.Builder(context)
+                                .setTitle("出了点小问题")
+                                .setMessage("要不您再重新扫下二维码？")
+                                .setPositiveButton("知道了", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // continue
+                                    }
+                                })
+                                .setNegativeButton("Got it", new DialogInterface.OnClickListener()
+                                {
+                                    public void onClick(DialogInterface dialog, int which)
+                                    {
+                                        // do nothing
+                                    }
+                                })
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .show();
+                    }
+                }
+            };
+
+            task.delivercargo(task.getId(), httpCallback);
+
+        }
+    }
 }
