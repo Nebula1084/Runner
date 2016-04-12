@@ -27,7 +27,6 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
 
     private PtrFrameLayout task_status_ptr_frame;
     private LinearLayout task_status_queue;
-    private int task_status = 0;
     private Task task;
 
     private boolean isAdd_publish_status = false;
@@ -61,86 +60,15 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
 
     @Override
     public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
-//        task_status++;
-//        if (task_status % 2 != 0)
-//        {
-//            ptrFrameLayout.refreshComplete();
-//            LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
-//            TextView textView = (TextView) linearLayout.getChildAt(linearLayout.getChildCount() - 1);
-//            textView.setText(task.getReceivingAddress() + task_status);
-//        }
-//        else
-//        {
-//            ptrFrameLayout.refreshComplete();
-//            LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_task_finished, task_status_queue);
-//            ButtonRectangle buttonRectangle = (ButtonRectangle) linearLayout.getChildAt(linearLayout.getChildCount() - 1);
-//            buttonRectangle.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(getContext(), CommentActivity.class);
-//                    intent.putExtra(Task.class.getName(), task);
-//                    startActivity(intent);
-//                }
-//            });
-//        }
 
-        parse_task_status(task.getStatus());
+        int task_status = parse_task_status(task.getStatus());
 
-        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
-
-        if( isAdd_publish_status == false && task_status >= 1)
+        for(int i=0;i<task_status; i++)
         {
-            TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已发布,等待被抢单\n"+ milles_to_chinese_format(task.getCreate_timestamp() ));
-            isAdd_publish_status = true;
+            add_status( i );
         }
 
-        if( isAdd_accept_status == false && task_status >= 2)
-        {
-            TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已被抢单，等待接货开始任务\n"+ milles_to_chinese_format( task.getActual_gain_time() ));
-            isAdd_accept_status = true;
-        }
 
-        if( isAdd_progress_status == false && task_status >= 3)
-        {
-            TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("任务进行中\n"+ "执行者:"+task.getTaskShipper() );
-            isAdd_progress_status = true;
-        }
-
-        if( isAdd_delivered_status == false && task_status >= 4)
-        {
-            TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("货物已送达\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
-            isAdd_delivered_status = true;
-        }
-
-        if( isAdd_completed_status == false && task_status >= 5)
-        {
-            TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已付款，等待评价\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
-
-            isAdd_completed_status = true;
-
-            LinearLayout linearLayout2 = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_task_finished, task_status_queue);
-            ButtonRectangle buttonRectangle = (ButtonRectangle) linearLayout2.getChildAt(linearLayout.getChildCount() - 1);
-            buttonRectangle.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), CommentActivity.class);
-                    intent.putExtra(Task.class.getName(), task);
-                    startActivity(intent);
-                }
-            });
-        }
-
-        if( isAdd_comment_status == false && task_status >= 6)
-        {
-            TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
-            textview.setText("已评价。\n评分="+task.getRate()+"\n"+task.getComment()+"\n快去发布新任务吧");
-            isAdd_comment_status = true;
-        }
 
     }
 
@@ -151,8 +79,9 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
         return calendar.get(Calendar.YEAR)+"年"+calendar.get(Calendar.MONTH)+"月"+calendar.get(Calendar.DAY_OF_MONTH)+"日"+calendar.get(Calendar.HOUR_OF_DAY)+"时"+calendar.get(Calendar.MINUTE)+"分"+calendar.get(Calendar.SECOND)+"秒";
     }
 
-    public void parse_task_status(Task.TaskStatus s)
+    public int parse_task_status(Task.TaskStatus s)
     {
+        int task_status = 0;
         switch (s)
         {
             case INIT:task_status = 0;break;
@@ -164,5 +93,104 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
             case RATED:task_status = 6;break;
             default:task_status = 0;break;
         }
+        return task_status;
+    }
+
+    public void add_status( int code)
+    {
+        switch (code)
+        {
+            case 0: add_publish_status();break;
+            case 1: add_accept_status();break;
+            case 2: add_progress_status();break;
+            case 3: add_delivered_status();break;
+            case 4: add_completed_status();break;
+            case 5: add_comment_status();break;
+            default: break;
+        }
+    }
+
+    public void add_publish_status( )
+    {
+        if( isAdd_publish_status )
+            return;
+
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
+
+        TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
+        textview.setText("已发布,等待被抢单\n"+ milles_to_chinese_format(task.getCreate_timestamp() ));
+        isAdd_publish_status = true;
+    }
+
+    public void add_accept_status( )
+    {
+        if( isAdd_accept_status )
+            return;
+
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
+
+        TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
+        textview.setText("已被抢单，等待接货开始任务\n"+ milles_to_chinese_format( task.getActual_gain_time() ));
+        isAdd_accept_status = true;
+    }
+
+    public void add_progress_status()
+    {
+        if( isAdd_progress_status )
+            return;
+
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
+
+        TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
+        textview.setText("任务进行中\n"+ "执行者:"+task.getTaskShipper() );
+        isAdd_progress_status = true;
+    }
+
+    public void add_delivered_status()
+    {
+        if( isAdd_delivered_status )
+            return ;
+
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
+
+        TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
+        textview.setText("货物已送达\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
+        isAdd_delivered_status = true;
+    }
+
+    public void add_completed_status(  )
+    {
+        if( isAdd_completed_status )
+            return ;
+        isAdd_completed_status = true;
+
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
+
+        TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
+        textview.setText("已付款，等待评价\n"+ milles_to_chinese_format( task.getActual_delivery_time() ));
+
+
+        LinearLayout linearLayout2 = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_task_finished, task_status_queue);
+
+        ButtonRectangle buttonRectangle = (ButtonRectangle) linearLayout2.getChildAt(linearLayout.getChildCount() - 1);
+        buttonRectangle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), CommentActivity.class);
+                intent.putExtra(Task.class.getName(), task);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void add_comment_status( )
+    {
+        if( isAdd_comment_status )
+            return ;
+        LinearLayout linearLayout = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.item_message, task_status_queue);
+
+        TextView textview = (TextView) linearLayout.getChildAt( linearLayout.getChildCount() - 1 );
+        textview.setText("已评价。\n评分="+task.getRate()+"\n"+task.getComment()+"\n快去发布新任务吧");
+        isAdd_comment_status = true;
     }
 }

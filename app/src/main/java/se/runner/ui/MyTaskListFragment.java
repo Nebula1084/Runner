@@ -93,6 +93,7 @@ public class MyTaskListFragment extends TaskListFragment implements TaskListFrag
                 {
                     // can't cast to long and float
                     int status = (int) jsonObject.get("status");
+
                     if ( taskType.equals("wait_Acpt") && status != 0)
                         continue;
                     else if( taskType.equals("completed") && status != 3)

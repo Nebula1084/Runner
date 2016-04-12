@@ -149,20 +149,25 @@ public class TaskListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(List<Task> tasks)
+    {
         this.tasks = tasks;
+        notifyDataSetChanged();
     }
 
     public void addTask(Task task) {
         tasks.add(task);
+        notifyDataSetChanged();
     }
 
     public void removeTask(Task task) {
         tasks.remove(task);
+        notifyDataSetChanged();
     }
 
     public void removeTask(int index) {
         tasks.remove(index);
+        notifyDataSetChanged();
     }
 
 

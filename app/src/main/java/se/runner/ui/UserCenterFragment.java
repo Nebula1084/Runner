@@ -1,12 +1,19 @@
 package se.runner.ui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -31,8 +38,9 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
     private TextView deliveryNum;
     private TextView publishNum;
 
+    private Context context;
 
-    private User user;
+    private static User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
@@ -88,6 +96,8 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         deliveryNum.setText( user.getTakeTaskNum()+"" );
         publishNum.setText( user.getLaunchTaskNum()+"" );
 
+        context = getActivity();
+
         return view;
     }
 
@@ -109,11 +119,29 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 startActivityForResult( intent, CONTACT_LIST );
                 break;
             case R.id.user_logout:
-                // TODO: 4/12/16 logout action
+                logout();
                 break;
             case R.id.user_edit:
                 // TODO: 4/12/16 user edit
+//                final EditText input = new EditText(context);
                 break;
         }
+    }
+
+
+    public void confirmChangeNickname()
+    {
+
+    }
+
+    public void logout()
+    {
+        // TODO: 4/12/16 save local changes to server
+        getActivity().finish();
+    }
+
+    public void upload_ok()
+    {
+        getActivity().finish();
     }
 }

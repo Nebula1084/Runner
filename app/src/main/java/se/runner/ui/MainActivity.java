@@ -245,8 +245,8 @@ public class MainActivity extends AppCompatActivity
                         Log.e(TAG, "server response is null");
                     else if (get.equals("success")) {
                         new AlertDialog.Builder(context)
-                                .setTitle("成功领取货物")
-                                .setMessage("赶紧送到收货人手里去吧")
+                                .setTitle("成功授权领取货物")
+                                .setMessage("您的货物已被送出，正在飞速前往收货人手中")
                                 .setPositiveButton("知道了", new DialogInterface.OnClickListener()
                                 {
                                     public void onClick(DialogInterface dialog, int which)
@@ -288,6 +288,7 @@ public class MainActivity extends AppCompatActivity
             };
 
             task.gaincargo(task.getId(), httpCallback);
+
         } else if (task.getStatus() == Task.TaskStatus.PROGRESS)  // consignee scan for delivery ok, then task is completed
         {
             if (user.getAccount().equals(task.getTaskConsignee()) == false) {
@@ -364,7 +365,7 @@ public class MainActivity extends AppCompatActivity
                 }
             };
 
-            task.delivercargo(task.getId(), httpCallback);
+            task.delivercargo( task.getId(), httpCallback );
 
         }
     }

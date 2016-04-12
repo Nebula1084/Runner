@@ -90,7 +90,8 @@ public class MyDeliveryListFragment extends TaskListFragment implements TaskList
                 {
                     // can't cast to long and float
                     int status = (int) jsonObject.get("status");
-                    if ( type.equals("progress") && status != 1)
+
+                    if ( type.equals("progress") && status != 2 )
                         continue;
                     else if( type.equals("completed") && status != 3)
                         continue;
