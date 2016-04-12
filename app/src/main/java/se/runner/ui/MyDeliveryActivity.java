@@ -9,9 +9,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
+
+import java.util.Calendar;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -39,6 +42,10 @@ public class MyDeliveryActivity extends AppCompatActivity {
 
     @Bind(R.id.mydelivery_delivery_check)
     CheckBox mydelivery_delivery_check;
+
+    private TextView delivery_target_address;
+    private TextView delivery_publish_time;
+    private TextView delivery_payment;
 
     private Task task;
 
@@ -68,7 +75,16 @@ public class MyDeliveryActivity extends AppCompatActivity {
         mydelivery_location_delivery_picker.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_map_marker).sizeDp(32));
         mydelivery_task_id.setImageDrawable(new IconDrawable(this, FontAwesomeIcons.fa_qrcode).sizeDp(32));
 
+        delivery_target_address = (TextView) findViewById(R.id.mydelivery_target_address);
+        delivery_publish_time = (TextView) findViewById(R.id.mydelivery_publish_time);
+        delivery_payment = (TextView) findViewById(R.id.mydelivery_pay);
 
+        delivery_target_address.setText( task.getDeliveryAddress() );
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis( task.getCreate_timestamp() );
+        delivery_publish_time.setText( calendar.get(Calendar.YEAR)+"年"+calendar.get(Calendar.MONTH)+"月"+calendar.get(Calendar.DAY_OF_MONTH)+"日"+calendar.get(Calendar.HOUR_OF_DAY)+"时"+calendar.get(Calendar.MINUTE)+"分"+calendar.get(Calendar.SECOND)+"秒"); // asume publish time = create time
+        delivery_payment.setText( task.getPayment() + "");
 
     }
 

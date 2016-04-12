@@ -106,7 +106,8 @@
                 <TextView
                     style="@style/publsh_text_item"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/locaiton_delivery" />
+                    android:text="@string/locaiton_delivery"
+                    android:id="@+id/mydelivery_target_address"/>
             </LinearLayout>
 
             <LinearLayout style="@style/publish_layout_item">
@@ -124,7 +125,8 @@
                 <TextView
                     style="@style/publsh_text_item"
                     android:layout_gravity="center_vertical"
-                    android:text="发布时间:" />
+                    android:text="发布时间:"
+                    android:id="@+id/mydelivery_publish_time"/>
             </LinearLayout>
 
             <LinearLayout style="@style/publish_layout_item">
@@ -142,7 +144,8 @@
                 <TextView
                     style="@style/publsh_text_item"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/publish_pay" />
+                    android:text="@string/publish_pay"
+                    android:id="@+id/mydelivery_pay"/>
             </LinearLayout>
 
         </LinearLayout>
