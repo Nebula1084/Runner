@@ -121,7 +121,9 @@ public class MainActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.action_publish:
                 Intent intent = new Intent(MainActivity.this, TaskPublishActivity.class);
-                intent.putExtra("account",user.getAccount());
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("user",user);
+                intent.putExtras(bundle);
                 startActivity(intent);
                 break;
             case R.id.action_scan:

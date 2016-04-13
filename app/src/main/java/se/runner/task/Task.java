@@ -109,11 +109,11 @@ public class Task implements Serializable {
                         category,
                         timestamp,
                         (float) pay,
-                        emergency,
                         delivery_time,
                         recieving_time,
                         delivery_address,
                         recieving_address,
+                        emergency,
                         status,
                         rate,
                         gain_time,
@@ -140,11 +140,11 @@ public class Task implements Serializable {
                 final String taskCategory,
                 final long timestamp,
                 final float pay,
-                final int emergencyLevel,
                 final long delivery_time,
                 final long receiving_time,
                 final String delivery_address,
                 final String receiving_address,
+                final int emergencyLevel,
                 final int statusCode,
                 final double rateCode,
                 final long gain_time,
@@ -180,32 +180,6 @@ public class Task implements Serializable {
             case 4: status = TaskStatus.RATED;break;
         }
     }
-
-    // no account validation check, may not safe
-    // once publish successful, a task will be created.
-//    public Task(Context ctx,
-//                final String taskLauncherAccount,
-//                final String taskCategory,
-//                final String taskConsigneeAccount,
-//                final float pay,
-//                final long delivery_time,
-//                final long receiving_time,
-//                final String delivery_address,
-//                final String receiving_address,
-//                final int emergencyLevel) {
-//        context = ctx;
-//
-//        taskLauncher = taskLauncherAccount;
-//        category = taskCategory;
-//        taskConsignee = taskConsigneeAccount;
-//        payment = pay;
-//
-//        required_delivery_time = delivery_time;
-//        required_gain_time = receiving_time;
-//        target_address = delivery_address;
-//        source_address = receiving_address;
-//        emergency = emergencyLevel;
-//    }
 
     public void publish() {
         HttpCallback httpCallback = new HttpCallback() {

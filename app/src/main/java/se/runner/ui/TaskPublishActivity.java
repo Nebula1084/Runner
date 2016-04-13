@@ -30,6 +30,7 @@ import butterknife.OnClick;
 import se.runner.R;
 import se.runner.request.HttpCallback;
 import se.runner.task.Task;
+import se.runner.user.User;
 import se.runner.widget.RunnerTimePicker;
 
 public class TaskPublishActivity extends AppCompatActivity {
@@ -53,7 +54,7 @@ public class TaskPublishActivity extends AppCompatActivity {
     private RunnerTimePicker publishPickTimePicker;
     private RunnerTimePicker publishDeliveryTimePicker;
 
-    private String account;
+    private User user;
 
     private float payment;
     private String category = "玉泉快递";
@@ -65,6 +66,8 @@ public class TaskPublishActivity extends AppCompatActivity {
     private String consignee;
 
     private Context context;
+    private boolean userBalanceEnough = true;
+    private boolean consigneeLegal = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,11 +106,18 @@ public class TaskPublishActivity extends AppCompatActivity {
         Intent intent = getIntent();
         if( intent != null )
         {
-            account = intent.getExtras().getString("account");
-            Log.e(TAG,"parse account ="+account+" from intent");
+            user = (User) intent.getExtras().getSerializable("user");
+            if( user != null)
+                Log.e(TAG,"parse account ="+user.getAccount()+" from intent");
+            else
+            {
+                user = new User("null", "null");
+                Log.e(TAG,"parse from intent, get nothing");
+            }
         }
-        else
-            Log.e(TAG,"intent is null");
+        else {
+            Log.e(TAG, "intent is null");
+        }
     }
 
 
@@ -118,19 +128,59 @@ public class TaskPublishActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.publish_btn_confifrm)
-    void confirm() {
+    void confirm()
+    {
+        if( userBalanceEnough == false )
+        {
+            new AlertDialog.Builder(context)
+                    .setTitle("您的账户余额不足")
+                    .setMessage("充值后再发布，或者减小赏金")
+                    .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue
+                        }
+                    })
+                    .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return ;
+        }
+        if( consigneeLegal == false )
+        {
+            new AlertDialog.Builder(context)
+                    .setTitle("收货人不合法")
+                    .setMessage("快让"+consignee+"注册一个账户吧")
+                    .setPositiveButton("知道了", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // continue
+                        }
+                    })
+                    .setNegativeButton("Got it", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+            return ;
+        }
+
         Task task = new Task((int)System.currentTimeMillis(),
-                account,
+                user.getAccount(),
                 "",
                 consignee,
                 category,
                 System.currentTimeMillis(),
                 payment,
-                emergency,
                 delivery_time,
                 gain_time,
                 target_address,
                 source_address,
+                emergency,
                 0,
                 0,
                 0,
@@ -260,6 +310,11 @@ public class TaskPublishActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 payment = Float.parseFloat( input.getText().toString() );
+                if( payment > user.getBalance() )
+                    userBalanceEnough = false;
+                else
+                    userBalanceEnough = true;
+
             }
         });
         builder.setNegativeButton("等等", new DialogInterface.OnClickListener() {
@@ -289,6 +344,21 @@ public class TaskPublishActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 consignee = input.getText().toString() ;
+
+                HttpCallback httpCallback = new HttpCallback()
+                {
+                    @Override
+                    public void onPost(String get)
+                    {
+                        if( get == null)
+                            Log.e(TAG,"server response is null");
+                        else if( get.equals("yes"))
+                            consigneeLegal = true;
+                        else
+                            consigneeLegal = false;
+                    }
+                };
+                User.checkUser(consignee ,httpCallback);
             }
         });
         builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {

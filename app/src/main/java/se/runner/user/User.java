@@ -93,6 +93,16 @@ public class User implements Serializable
         return false;
     }
 
+    public static boolean checkUser(String account, HttpCallback httpCallback)
+    {
+        ContentValues para = new ContentValues();
+        para.put("account", account);
+
+        new HttpPost("/checkuser", para, httpCallback ).execute();
+
+        return false;
+    }
+
     // for inner use
     public boolean checkUser()
     {
@@ -682,8 +692,7 @@ public class User implements Serializable
                 {
                     login = 1;
                     register = true;
-                    // get account info from server
-                    //parseServerResponse(get);
+
                     getInfo();
 
                     if(DEBUG)
