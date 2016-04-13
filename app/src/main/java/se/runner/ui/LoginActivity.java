@@ -4,12 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.gc.materialdesign.views.CheckBox;
 import com.joanzapata.iconify.IconDrawable;
 import com.joanzapata.iconify.Iconify;
 import com.joanzapata.iconify.fonts.FontAwesomeIcons;
@@ -31,6 +33,15 @@ public class LoginActivity extends AppCompatActivity {
     private MaterialEditText account_editText;
     private MaterialEditText passwd_editText;
     private Context context;
+
+    private boolean save_passwd = false;
+    private boolean auto_login = false;
+
+    @Bind(R.id.checkBox_passwd_record)
+    CheckBox record_passwd_checkbox;
+
+    @Bind(R.id.checkBox_auto_login)
+    CheckBox auto_login_checkbox;
 
     @Bind(R.id.tool_bar)
     Toolbar toolbar;
@@ -132,7 +143,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
@@ -148,7 +160,135 @@ public class LoginActivity extends AppCompatActivity {
         account_editText = (MaterialEditText) findViewById(R.id.login_account_text);
         passwd_editText = (MaterialEditText) findViewById(R.id.login_passwd_text);
 
+        auto_login_checkbox.setOncheckListener(new CheckBox.OnCheckListener()
+        {
+            @Override
+            public void onCheck(CheckBox view, boolean check)
+            {
+                Log.e(TAG,"check = "+check);
+                record_passwd_checkbox.setChecked( auto_login_checkbox.isCheck() );
+            }
+        });
+
+        save_passwd = load_record_passwd_state();
+        auto_login = load_auto_login_state();
+
+        record_passwd_checkbox.setChecked( save_passwd );
+        auto_login_checkbox.setChecked( auto_login );
+
+        if( save_passwd )
+        {
+            String stored_passwd = load_passwd_content();
+            String stored_account = load_account_content();
+
+            if( stored_passwd.equals("null") == false && stored_account.equals("null") == false )  // means the passwd is stored before
+            {
+                passwd_editText.setText( stored_passwd );
+                account_editText.setText( stored_account );
+
+                if( auto_login )
+                {
+                    Log.e(TAG,"auto login.....");
+                    login();
+                }
+            }
+
+        }
+
 //        confirmLogin();
+    }
+
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        record_passwd_checkbox.setChecked( load_record_passwd_state() );
+        auto_login_checkbox.setChecked( load_auto_login_state() );
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        save_auto_login_state( auto_login_checkbox.isCheck() );
+        save_record_passwd_state( record_passwd_checkbox.isCheck() );
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+
+        save_auto_login_state( auto_login_checkbox.isCheck() );
+        save_record_passwd_state( record_passwd_checkbox.isCheck() );
+
+        if( record_passwd_checkbox.isCheck() )
+        {
+            save_account_content( account_editText.getText().toString() );
+            save_passwd_content( passwd_editText.getText().toString() );
+        }
+    }
+
+    private boolean load_record_passwd_state()
+    {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("save_passwd", false);
+    }
+
+    private void save_record_passwd_state(final boolean isChecked)
+    {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("save_passwd", isChecked);
+
+        editor.commit();
+    }
+
+    private boolean load_auto_login_state()
+    {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("auto_login", false);
+    }
+
+    private void save_auto_login_state(final boolean isChecked)
+    {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("auto_login", isChecked);
+
+        editor.commit();
+    }
+
+    private void save_passwd_content(final String passwd)
+    {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("passwd",passwd);
+
+        editor.commit();
+    }
+
+    private void save_account_content(final String account)
+    {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("account",account);
+
+        editor.commit();
+    }
+
+    private String load_passwd_content()
+    {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        return sharedPreferences.getString("passwd", "null");
+    }
+
+    private String load_account_content()
+    {
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        return sharedPreferences.getString("account", "null");
     }
 
 }

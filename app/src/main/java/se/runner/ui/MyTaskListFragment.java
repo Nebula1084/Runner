@@ -166,7 +166,7 @@ public class MyTaskListFragment extends TaskListFragment implements TaskListFrag
     @Override
     public void onRefresh() {
         /*for test. add a task to the list view*/
-        Toast.makeText(getContext(), "不要慌，正在刷新....", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "不要慌，正在刷新....", Toast.LENGTH_SHORT ).show();
 //        addTask(new Task());
 //        update();// and notify the adapter to update the listview
 

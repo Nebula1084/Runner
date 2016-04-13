@@ -183,7 +183,7 @@ public class TaskSquareFragment extends TaskListFragment implements TaskListFrag
     public void onRefresh()
     {
         /*for test. add a task to the list view*/
-        Toast.makeText(getContext(), "正在刷新...", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "正在刷新...", Toast.LENGTH_SHORT ).show();
 
         refreshTasks();
     }

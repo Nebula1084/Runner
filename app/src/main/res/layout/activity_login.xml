@@ -42,7 +42,7 @@
         android:orientation="horizontal">
 
         <com.gc.materialdesign.views.CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/checkBox_passwd_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="#1E88E5"
@@ -53,6 +53,18 @@
             android:layout_height="@dimen/login_third_line_height"
             android:layout_gravity="center_vertical"
             android:text="@string/record_passwd" />
+
+        <com.gc.materialdesign.views.CheckBox
+            android:id="@+id/checkBox_auto_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#1E88E5"
+            materialdesign:check="true" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/login_third_line_height"
+            android:text="@string/auto_login" />
 
         <View
             android:layout_width="0dp"

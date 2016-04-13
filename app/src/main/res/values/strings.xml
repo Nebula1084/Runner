@@ -57,4 +57,5 @@
     <string name="task_comment">任务评价</string>
     <string name="input_address">请输入地址</string>
     <string name="task_wait_comment">待评价</string>
+    <string name="auto_login">自动登录</string>
 </resources>

@@ -382,7 +382,7 @@ public class TaskPublishActivity extends AppCompatActivity {
                 address = data.getStringExtra("address");
                 if( address != null && address.length() != 0)
                 {
-                    Toast.makeText(TaskPublishActivity.this, address, Toast.LENGTH_LONG).show();
+                    Toast.makeText(TaskPublishActivity.this, "设置取货点："+address, Toast.LENGTH_SHORT ).show();
                     source_address = address;
                 }
                 break;
@@ -390,7 +390,7 @@ public class TaskPublishActivity extends AppCompatActivity {
                 address = data.getStringExtra("address");
                 if( address != null && address.length() != 0)
                 {
-                    Toast.makeText(TaskPublishActivity.this, address, Toast.LENGTH_LONG).show();
+                    Toast.makeText(TaskPublishActivity.this, "设置收货点："+address, Toast.LENGTH_SHORT ).show();
                     target_address = address;
                 }
                 break;

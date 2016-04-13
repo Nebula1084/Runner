@@ -153,7 +153,7 @@ public class MyDeliveryListFragment extends TaskListFragment implements TaskList
     @Override
     public void onRefresh() {
         /*for test. add a task to the list view*/
-        Toast.makeText(getContext(), "刷呀刷呀...", Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), "刷呀刷呀...", Toast.LENGTH_SHORT ).show();
 //        addTask(new Task());
 //        update();// and notify the adapter to update the listview
 

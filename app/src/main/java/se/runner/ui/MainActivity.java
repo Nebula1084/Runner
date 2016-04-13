@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         {
             case MAIN_QR_SCAN:
                 String jsonString = data.getStringExtra(ScanActivity.SCAN_URL);
-                Toast.makeText(this,jsonString , Toast.LENGTH_LONG).show();
+//                Toast.makeText(this,jsonString , Toast.LENGTH_LONG).show();
                 handleQRResult(jsonString);
                 break;
             case 65536 + UserCenterFragment.CONTACT_LIST:
@@ -384,7 +384,6 @@ public class MainActivity extends AppCompatActivity
             Toast.makeText(this,"再次按下返回键退出应用",Toast.LENGTH_SHORT).show();
             if( current_mills - old_cancel_mills < 1000 )
             {
-                Log.e(TAG,"currentMills="+current_mills+",oldMills="+old_cancel_mills+",differ="+(current_mills-old_cancel_mills));
                 // TODO: 4/13/16 upload changes to server if there are
 
 
