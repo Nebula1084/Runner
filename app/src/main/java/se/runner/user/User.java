@@ -71,17 +71,6 @@ public class User implements Serializable
         contactList = new ArrayList<>();
     }
 
-    public boolean isRegistered(HttpCallback httpCallback)
-    {
-        //// TODO: 4/1/16 need a entrance for validate register info
-        ContentValues para = new ContentValues();
-        para.put("account",account);
-
-        new HttpPost("/checkuser",para,httpCallback).execute();
-
-        return register;
-    }
-
     // for outer function call
     public boolean checkUser(HttpCallback httpCallback)
     {
@@ -286,7 +275,6 @@ public class User implements Serializable
                     Log.e(TAG,"set nickname::user not exist");
                 else
                 {
-                    //// TODO: 3/31/16 update nickname
                     parseServerResponse(get);
                     new AlertDialog.Builder(context)
                             .setTitle("设置昵称成功")
@@ -353,7 +341,6 @@ public class User implements Serializable
                 }
                 else
                 {
-                    //// TODO: 3/31/16 set address
                     parseServerResponse(get);
 
                     if( DEBUG )
@@ -649,7 +636,6 @@ public class User implements Serializable
 
                 if(get.equals("account not exist."))
                 {
-                    //// TODO: 3/30/16 login-failed:no such accout
                     register = false;
                     new AlertDialog.Builder(context)
                             .setTitle("用户不存在")
@@ -670,7 +656,6 @@ public class User implements Serializable
                 }
                 else if(get.equals("passwd incorrect"))
                 {
-                    //// TODO: 3/30/16 login-faild: incorrect passwd
                     register = true;
                     new AlertDialog.Builder(context)
                             .setTitle("密码错误")
@@ -722,16 +707,22 @@ public class User implements Serializable
     }
 
 
-
-    public boolean logout()
+    public void logout(HttpCallback httpCallback)
     {
-        if( !isLogin() )
-            return false;
-
         ContentValues para = new ContentValues();
 
-        para.put("accout", account);
-        new HttpPost("/logout", para, new HttpCallback()
+        para.put("account", account);
+
+        new HttpPost("/logout", para, httpCallback ).execute();
+
+    }
+
+    public void logout()
+    {
+        if( !isLogin() )
+            return;
+
+        HttpCallback httpCallback = new HttpCallback()
         {
             @Override
             public void onPost(String get)
@@ -762,9 +753,9 @@ public class User implements Serializable
                     Log.e(TAG,"logout can't fail");
                 }
             }
-        }).execute();
+        };
 
-        return login == 0;
+        logout(httpCallback);
     }
 
     public boolean register(HttpCallback httpCallback)
@@ -798,7 +789,6 @@ public class User implements Serializable
             {
                 if(get == null )  // reigster failed
                 {
-                    //// TODO: 3/30/16 USER register failed
                     Log.e(TAG,"get string is null");
 
                     new AlertDialog.Builder(context)
@@ -885,9 +875,7 @@ public class User implements Serializable
         if( !isLogin() )
             return;
 
-        ContentValues para = new ContentValues();
-        para.put("account",account);
-        new HttpPost("/info", para, new HttpCallback()
+        HttpCallback httpCallback = new HttpCallback()
         {
             @Override
             public void onPost(String get)
@@ -920,34 +908,9 @@ public class User implements Serializable
 
                 }
             }
-        }).execute();
-    }
+        };
 
-    public void refresh()
-    {
-        int localTimeStamp = timestamp;
-
-        ContentValues para = new ContentValues();
-        para.put("account",account);
-        new HttpPost("/timestamp", para, new HttpCallback()
-        {
-            @Override
-            public void onPost(String get)
-            {
-                if ( get == null )
-                    Log.e(TAG,"get timestamp reurn null");
-                else
-                {
-                    //// TODO: 3/31/16 get timestammp from server
-                }
-            }
-        }).execute();
-
-        if( timestamp < localTimeStamp )  // local is newest, need update to local
-        {
-            timestamp = localTimeStamp;
-            //// TODO: 3/31/16 update local info to server
-        }
+        getInfo(httpCallback);
     }
 
     public void parseServerResponse(String response)

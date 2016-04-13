@@ -9,6 +9,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity
 
     private User user;
     private Context context;
+
+    private long old_cancel_mills = 0;
 
     private TaskSquareFragment taskSquareFragment;
     private MyDeliveryFragment myDeliveryFragment;
@@ -128,10 +131,6 @@ public class MainActivity extends AppCompatActivity
                 break;
             case R.id.action_scan:
                 startActivityForResult(new Intent(MainActivity.this, ScanActivity.class), MAIN_QR_SCAN);
-                break;
-            case android.R.id.home:
-                // TODO: 4/13/16 upload changes to server if there are
-                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -375,4 +374,27 @@ public class MainActivity extends AppCompatActivity
 
         }
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if( keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            long current_mills = System.currentTimeMillis();
+            Toast.makeText(this,"再次按下返回键退出应用",Toast.LENGTH_SHORT).show();
+            if( current_mills - old_cancel_mills < 1000 )
+            {
+                Log.e(TAG,"currentMills="+current_mills+",oldMills="+old_cancel_mills+",differ="+(current_mills-old_cancel_mills));
+                // TODO: 4/13/16 upload changes to server if there are
+
+
+                finish();
+            }
+            old_cancel_mills = current_mills;
+            return true;
+        }
+
+        return super.onKeyDown(keyCode,event);
+    }
+
 }

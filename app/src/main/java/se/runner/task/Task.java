@@ -260,8 +260,6 @@ public class Task implements Serializable {
 
     public static void findAvailableTask(HttpCallback httpCallback) {
         ContentValues para = new ContentValues();
-
-        // TODO: 4/4/16 not sure empty para will make the http post work
         new HttpPost("/availabletask", para, httpCallback).execute();
     }
 
@@ -354,32 +352,26 @@ public class Task implements Serializable {
 
     public void startTask() {
         setStatus(TaskStatus.PROGRESS);
-        // TODO: 4/1/16 start task
     }
 
     public void releaseTask() {
         setStatus(TaskStatus.PUBLISHED);
-        // TODO: 4/1/16 release task
     }
 
     public void resumeTask() {
         setStatus(TaskStatus.PROGRESS);
-        // TODO: 4/1/16 resumeTask
     }
 
     public void pauseTask() {
         setStatus(TaskStatus.PAUSED);
-        //// TODO: 4/1/16  pause task
     }
 
     public void abortTask() {
         setStatus(TaskStatus.ABORT);
-        //// TODO: 4/1/16 abort task
     }
 
     public void comleteTask() {
         setStatus(TaskStatus.COMPLETED);
-        //// TODO: 4/1/16 complete task
     }
 
     public long getCreate_timestamp()
