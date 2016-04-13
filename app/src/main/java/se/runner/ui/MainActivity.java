@@ -129,6 +129,10 @@ public class MainActivity extends AppCompatActivity
             case R.id.action_scan:
                 startActivityForResult(new Intent(MainActivity.this, ScanActivity.class), MAIN_QR_SCAN);
                 break;
+            case android.R.id.home:
+                // TODO: 4/13/16 upload changes to server if there are
+                finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

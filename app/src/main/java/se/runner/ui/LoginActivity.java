@@ -115,6 +115,9 @@ public class LoginActivity extends AppCompatActivity {
         intent.putExtra("passwd", user.getPasswd());
 
         startActivity(intent);
+
+        // quit login activity so main activity won't back to it in a normal way
+        finish();
     }
 
     @OnClick(R.id.login_btn_test)
