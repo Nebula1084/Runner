@@ -60,21 +60,15 @@ public class TaskStatusFragment extends Fragment implements PtrHandler
     }
 
     @Override
-    public void onRefreshBegin(PtrFrameLayout ptrFrameLayout) {
-
+    public void onRefreshBegin(PtrFrameLayout ptrFrameLayout)
+    {
         int task_status = parse_task_status(task.getStatus());
-
 
         boolean isCommented = (task_status == 6);
         for(int i=0;i<task_status; i++)
         {
             add_status( i , isCommented );
         }
-
-
-
-
-
     }
 
     public int parse_task_status(Task.TaskStatus s)

@@ -288,9 +288,7 @@ public class TaskPublishActivity extends AppCompatActivity {
     void pickDeliveryTime()
     {
         publishDeliveryTimePicker.show();
-        long old_time = delivery_time;
         delivery_time = publishDeliveryTimePicker.getCalendar().getTimeInMillis();
-        Log.e(TAG,"old time="+old_time+",new time="+delivery_time);
     }
 
     @OnClick(R.id.publish_pay_picker)

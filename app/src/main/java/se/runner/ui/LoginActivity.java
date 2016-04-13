@@ -170,32 +170,43 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        save_passwd = load_record_passwd_state();
-        auto_login = load_auto_login_state();
-
-        record_passwd_checkbox.setChecked( save_passwd );
-        auto_login_checkbox.setChecked( auto_login );
-
-        if( save_passwd )
+        Intent intent = getIntent();
+        if( intent != null && intent.getBooleanExtra("logout",false) )
         {
-            String stored_passwd = load_passwd_content();
-            String stored_account = load_account_content();
+            save_auto_login_state( false );
+            save_record_passwd_state( false );
+            save_account_content("null");
+            save_passwd_content("null");
+            save_passwd = false;
+            auto_login = false;
+        }
+        else
+        {
+            save_passwd = load_record_passwd_state();
+            auto_login = load_auto_login_state();
 
-            if( stored_passwd.equals("null") == false && stored_account.equals("null") == false )  // means the passwd is stored before
+            auto_login_checkbox.setChecked( auto_login );
+
+            if( save_passwd )
             {
-                passwd_editText.setText( stored_passwd );
-                account_editText.setText( stored_account );
+                String stored_passwd = load_passwd_content();
+                String stored_account = load_account_content();
 
-                if( auto_login )
+                if( stored_passwd.equals("null") == false && stored_account.equals("null") == false )  // means the passwd is stored before
                 {
-                    Log.e(TAG,"auto login.....");
-                    login();
+                    passwd_editText.setText( stored_passwd );
+                    account_editText.setText( stored_account );
+                    record_passwd_checkbox.setChecked( save_passwd );
+
+                    if( auto_login )
+                    {
+                        login();
+                    }
                 }
             }
-
         }
 
-//        confirmLogin();
+
     }
 
     @Override

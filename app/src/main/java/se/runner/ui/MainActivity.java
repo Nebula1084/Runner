@@ -158,7 +158,6 @@ public class MainActivity extends AppCompatActivity
                     user.setContactList( tmpList );
                     Log.e(TAG,"user contact list updated");
                 }
-
                 break;
         }
     }

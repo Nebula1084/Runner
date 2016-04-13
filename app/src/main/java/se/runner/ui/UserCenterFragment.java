@@ -139,9 +139,10 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
     {
         // TODO: 4/12/16 save local changes to server
 
+        Intent intent = new Intent(getActivity(),LoginActivity.class);
+        intent.putExtra("logout",true);
 
-        startActivity(new Intent(getActivity(),LoginActivity.class));
-
+        startActivity(intent);
         getActivity().finish();
     }
 
