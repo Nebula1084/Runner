@@ -62,8 +62,9 @@
             materialdesign:check="true" />
 
         <TextView
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/login_third_line_height"
+            android:layout_gravity="center_vertical"
             android:text="@string/auto_login" />
 
         <View
